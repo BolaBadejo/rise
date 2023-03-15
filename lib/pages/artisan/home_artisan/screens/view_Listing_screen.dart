@@ -47,7 +47,7 @@ class _ViewListingScreenState extends State<ViewListingScreen> {
     // print('this is price now: $value');
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/new"),
+          Uri.parse("https://admin.rise.ng/api/booking/new"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -143,7 +143,7 @@ class _ViewListingScreenState extends State<ViewListingScreen> {
     try {
       Response response = await post(
           Uri.parse(
-              "https://test.rise.ng/api/payment/initialize/direct-purchase"),
+              "https://admin.rise.ng/api/payment/initialize/direct-purchase"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

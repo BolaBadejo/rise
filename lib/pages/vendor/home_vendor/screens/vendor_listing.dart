@@ -43,7 +43,7 @@ class _VendorListingState extends State<VendorListing> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/listing/my-listings'),
+          Uri.parse('https://admin.rise.ng/api/listing/my-listings'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

@@ -53,7 +53,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await put(
-          Uri.parse("https://test.rise.ng/api/update-business-profile"),
+          Uri.parse("https://admin.rise.ng/api/update-business-profile"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'
@@ -275,7 +275,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await get(
-          Uri.parse("https://test.rise.ng/api/payment/withdrawal-pin"),
+          Uri.parse("https://admin.rise.ng/api/payment/withdrawal-pin"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'
@@ -344,7 +344,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/reset-password"),
+          Uri.parse("https://admin.rise.ng/api/auth/reset-password"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'
@@ -456,7 +456,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/user-update-profile'),
+          Uri.parse('https://admin.rise.ng/api/user-update-profile'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

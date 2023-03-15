@@ -46,7 +46,7 @@ class _UserKYCHomeState extends State<UserKYCHome> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/kyc/progress'),
+          Uri.parse('https://admin.rise.ng/api/kyc/progress'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

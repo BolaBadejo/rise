@@ -34,7 +34,7 @@ class OtpFormState extends State<OtpForm> {
     var number = "234${phoneNumber!.substring(1)}";
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/generate-otp"),
+          Uri.parse("https://admin.rise.ng/api/auth/generate-otp"),
           body: {'phone_number': number});
 
       if (response.statusCode == 200) {
@@ -100,7 +100,7 @@ class OtpFormState extends State<OtpForm> {
     EasyLoading.show();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/verify-otp"),
+          Uri.parse("https://admin.rise.ng/api/auth/verify-otp"),
           body: {'phone_number': number, 'otp': otp});
 
       if (response.statusCode == 200) {

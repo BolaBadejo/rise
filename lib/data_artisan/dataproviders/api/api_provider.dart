@@ -13,7 +13,7 @@ import '../../model/verify_insure_account/verify_insure_account_request_model.da
 import 'custom_exception.dart';
 
 class ApiProvider {
-  final String _baseUrl = "https://test.rise.ng/api";
+  final String _baseUrl = "https://admin.rise.ng/api";
   // final String _baseUrl = "http://178.62.29.92";
 
   Future<dynamic> get(String url) async {

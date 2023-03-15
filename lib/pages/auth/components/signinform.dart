@@ -139,7 +139,7 @@ class SignInFormState extends State<SignInForm> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/reset-password"),
+          Uri.parse("https://admin.rise.ng/api/auth/reset-password"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'
@@ -247,7 +247,7 @@ class SignInFormState extends State<SignInForm> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/login"),
+          Uri.parse("https://admin.rise.ng/api/auth/login"),
           body: {'email': email, 'password': password});
 
       if (response.statusCode == 200) {

@@ -39,7 +39,7 @@ class InsurePageState extends State<InsurePage> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/services/all'),
+          Uri.parse('https://admin.rise.ng/api/services/all'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -69,7 +69,7 @@ class InsurePageState extends State<InsurePage> {
     try {
       Response response = await post(
           Uri.parse(
-              "https://test.rise.ng/api/payment/initialize/insure_product"),
+              "https://admin.rise.ng/api/payment/initialize/insure_product"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

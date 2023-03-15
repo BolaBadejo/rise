@@ -56,11 +56,11 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
     Response response;
     EasyLoading.show();
     // print(
-        // "$fullName - $number - $password - $passwordConfirmation - $email - $userType");
+    // "$fullName - $number - $password - $passwordConfirmation - $email - $userType");
     try {
       if (ref != null) {
         response = await post(
-            Uri.parse("https://test.rise.ng/api/auth/register"),
+            Uri.parse("https://admin.rise.ng/api/auth/register"),
             body: {
               'full_name': fullName,
               'phone_number': number,
@@ -71,7 +71,7 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
             });
       } else {
         response = await post(
-            Uri.parse("https://test.rise.ng/api/auth/register"),
+            Uri.parse("https://admin.rise.ng/api/auth/register"),
             body: {
               'full_name': fullName,
               'phone_number': number,

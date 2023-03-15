@@ -67,7 +67,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/update-status"),
+          Uri.parse("https://admin.rise.ng/api/booking/update-status"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -146,14 +146,14 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
   String totalBookings = '0';
   String totalBookingsCompleted = '0';
 
-  // fetchUserDetails()  https://test.rise.ng/api/fetch_top/{user_type}/{limit?}
+  // fetchUserDetails()  https://admin.rise.ng/api/fetch_top/{user_type}/{limit?}
 
   Future<void> fetchUserDetails() async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
 
     try {
-      final response = await get(Uri.parse('https://test.rise.ng/api/user'),
+      final response = await get(Uri.parse('https://admin.rise.ng/api/user'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -202,7 +202,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/dashboard/statistics'),
+          Uri.parse('https://admin.rise.ng/api/dashboard/statistics'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -234,7 +234,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/booking/vendor/current'),
+          Uri.parse('https://admin.rise.ng/api/booking/vendor/current'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -274,7 +274,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
     // print('this is Token: $getToken');
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Artisan/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Artisan/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -337,7 +337,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/resend/verification/token'),
+          Uri.parse('https://admin.rise.ng/api/resend/verification/token'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -411,7 +411,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Vendor/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Vendor/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -451,7 +451,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
   void setNewPriceOffer(context, bookingID, title, description, amount) async {
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/accept-booking"),
+          Uri.parse("https://admin.rise.ng/api/booking/accept-booking"),
           body: {
             'booking_id': bookingID,
             'amount': bookingID,
@@ -515,7 +515,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
     EasyLoading.show();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/accept-booking"),
+          Uri.parse("https://admin.rise.ng/api/booking/accept-booking"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

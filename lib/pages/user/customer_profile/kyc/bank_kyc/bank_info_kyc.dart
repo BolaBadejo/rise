@@ -97,11 +97,12 @@ class _BankInfoState extends State<BankInfo> {
     String getToken = sharedPreference.get('access_token').toString();
 
     try {
-      final response =
-          await get(Uri.parse('https://test.rise.ng/api/bank-lists'), headers: {
-        "Accept": "application/json",
-        'Authorization': 'Bearer $getToken'
-      });
+      final response = await get(
+          Uri.parse('https://admin.rise.ng/api/bank-lists'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
@@ -125,7 +126,7 @@ class _BankInfoState extends State<BankInfo> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/kyc/save-bank-info"),
+          Uri.parse("https://admin.rise.ng/api/kyc/save-bank-info"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'

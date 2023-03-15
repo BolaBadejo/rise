@@ -52,7 +52,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/dashboard/statistics'),
+          Uri.parse('https://admin.rise.ng/api/dashboard/statistics'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -84,7 +84,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/listing/top-listings/10'),
+          Uri.parse('https://admin.rise.ng/api/listing/top-listings/10'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -134,7 +134,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Vendor/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Vendor/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -174,7 +174,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Artisan/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Artisan/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -214,7 +214,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
 
     try {
-      final response = await get(Uri.parse('https://test.rise.ng/api/user'),
+      final response = await get(Uri.parse('https://admin.rise.ng/api/user'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -273,7 +273,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/resend/verification/token'),
+          Uri.parse('https://admin.rise.ng/api/resend/verification/token'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

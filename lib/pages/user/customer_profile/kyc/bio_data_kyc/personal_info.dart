@@ -90,7 +90,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   Future<void> getAllStates() async {
-    var baseUrl = "https://test.rise.ng/api/location/states/166";
+    var baseUrl = "https://admin.rise.ng/api/location/states/166";
 
     http.Response response = await http.get(Uri.parse(baseUrl));
 
@@ -99,7 +99,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/location/states/166'),
+          Uri.parse('https://admin.rise.ng/api/location/states/166'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -122,7 +122,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   Future<void> getAllLGA(stateID) async {
-    var baseUrl = "https://test.rise.ng/api/location/states/166";
+    var baseUrl = "https://admin.rise.ng/api/location/states/166";
 
     http.Response response = await http.get(Uri.parse(baseUrl));
 
@@ -131,7 +131,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/location/lgas/166/$stateID'),
+          Uri.parse('https://admin.rise.ng/api/location/lgas/166/$stateID'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -161,7 +161,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
     int country_id = 166;
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/kyc/save-personal-info"),
+          Uri.parse("https://admin.rise.ng/api/kyc/save-personal-info"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'

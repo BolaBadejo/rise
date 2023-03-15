@@ -64,7 +64,7 @@ class BankDataKYCState extends State<BankDataKYC> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/kyc/verify/bvn"),
+          Uri.parse("https://admin.rise.ng/api/kyc/verify/bvn"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'

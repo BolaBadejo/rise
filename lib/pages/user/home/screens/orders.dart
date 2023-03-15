@@ -49,7 +49,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/payment/initialize/purchase"),
+          Uri.parse("https://admin.rise.ng/api/payment/initialize/purchase"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -134,7 +134,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/update-status"),
+          Uri.parse("https://admin.rise.ng/api/booking/update-status"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -210,7 +210,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/booking/current'),
+          Uri.parse('https://admin.rise.ng/api/booking/current'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

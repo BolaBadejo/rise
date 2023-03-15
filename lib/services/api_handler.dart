@@ -29,7 +29,7 @@ import 'package:http/http.dart';
 // import 'package:rise/data_artisan/model/register_new_user/register_new_user_response_model.dart';
 
 class APIHandler {
-  final String baseUrl = "https://test.rise.ng/api/";
+  final String baseUrl = "https://admin.rise.ng/api/";
 
   dynamic _response(http.Response response) {
     switch (response.statusCode) {
@@ -65,7 +65,7 @@ class APIHandler {
   Future<void> logIn(context, email, password) async {
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/login"),
+          Uri.parse("https://admin.rise.ng/api/auth/login"),
           body: {'email': email, 'password': password});
 
       if (response.statusCode == 200) {
@@ -117,7 +117,7 @@ class APIHandler {
 
     var response = await http.get(
         Uri.parse(
-            "https://test.rise.ng/api/listing/fetch/$getLongitude/$getLongitude/$distance/$ignore"),
+            "https://admin.rise.ng/api/listing/fetch/$getLongitude/$getLongitude/$distance/$ignore"),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -138,7 +138,7 @@ class APIHandler {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
     final response =
-        await get(Uri.parse('https://test.rise.ng/api/listing/all'), headers: {
+        await get(Uri.parse('https://admin.rise.ng/api/listing/all'), headers: {
       "Accept": "application/json",
       'Authorization': 'Bearer $getToken'
     });
@@ -155,7 +155,7 @@ class APIHandler {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
     final response = await get(
-        Uri.parse('https://test.rise.ng/api/booking/current'),
+        Uri.parse('https://admin.rise.ng/api/booking/current'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -174,7 +174,7 @@ class APIHandler {
     var val = "data";
 
     var response =
-        await http.get(Uri.parse("https://test.rise.ng/api/services/all"));
+        await http.get(Uri.parse("https://admin.rise.ng/api/services/all"));
     var res = jsonDecode(response.body);
     print("response ${jsonDecode(response.body)}");
     List<dynamic> result = res[val][val];
@@ -193,7 +193,7 @@ class APIHandler {
     var responseJson;
     try {
       final response =
-          await http.get(Uri.parse('https://test.rise.ng/api/user'), headers: {
+          await http.get(Uri.parse('https://admin.rise.ng/api/user'), headers: {
         "Accept": "application/json",
         'Authorization': 'Bearer $getToken',
         "Content-Type": "application/json",
@@ -207,7 +207,7 @@ class APIHandler {
     return getAuthUserData;
   }
 
-  //  https://test.rise.ng/api/user
+  //  https://admin.rise.ng/api/user
   //
   // Future<RegisterNewUserResponse> registration(fullName, phoneNumber, email,
   //     userType, password, passwordConfirmation) async {
@@ -246,7 +246,7 @@ class APIHandler {
   //   LoginResponse loginData = LoginResponse();
   //   try {
   //     Response response = await post(
-  //         Uri.parse("https://test.rise.ng/api/auth/login"),
+  //         Uri.parse("https://admin.rise.ng/api/auth/login"),
   //         body: {'email': email, 'password': password});
   //
   //     if (response.statusCode == 200) {

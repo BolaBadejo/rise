@@ -36,7 +36,7 @@ class VerifiedPageState extends State<VerifiedPage> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/services/all'),
+          Uri.parse('https://admin.rise.ng/api/services/all'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -69,7 +69,7 @@ class VerifiedPageState extends State<VerifiedPage> {
     try {
       Response response = await post(
           Uri.parse(
-              "https://test.rise.ng/api/payment/initialize/verify_account"),
+              "https://admin.rise.ng/api/payment/initialize/verify_account"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

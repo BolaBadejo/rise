@@ -11,7 +11,7 @@ import 'package:rise/data/model/listings/listings_model.dart';
 import 'custom_exception.dart';
 
 class ApiProvider {
-  // final String _baseUrl = "https://test.rise.ng/api";
+  // final String _baseUrl = "https://admin.rise.ng/api";
   final String _baseUrl = "http://178.62.29.92/api";
   final Dio _dio = Dio();
 

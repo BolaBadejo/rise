@@ -131,7 +131,7 @@ class NewListingState extends State<NewListing> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final request = http.MultipartRequest(
-          'POST', Uri.parse('https://test.rise.ng/api/listing/new'));
+          'POST', Uri.parse('https://admin.rise.ng/api/listing/new'));
 
       List tagList = List.from(tags2, growable: false);
       List imageList = List.from(compressedImages, growable: false);

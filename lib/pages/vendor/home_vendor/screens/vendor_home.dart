@@ -56,14 +56,14 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
   GetAuthUserResponse? userData;
 
-  // fetchUserDetails()  https://test.rise.ng/api/fetch_top/{user_type}/{limit?}
+  // fetchUserDetails()  https://admin.rise.ng/api/fetch_top/{user_type}/{limit?}
 
   Future<void> fetchUserDetails() async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
 
     try {
-      final response = await get(Uri.parse('https://test.rise.ng/api/user'),
+      final response = await get(Uri.parse('https://admin.rise.ng/api/user'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -96,7 +96,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/dashboard/statistics'),
+          Uri.parse('https://admin.rise.ng/api/dashboard/statistics'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -128,7 +128,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/booking/current'),
+          Uri.parse('https://admin.rise.ng/api/booking/current'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -159,7 +159,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Vendor/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Vendor/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -202,7 +202,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final response = await get(
-        Uri.parse('https://test.rise.ng/api/fetch_top/Vendor/10?'),
+        Uri.parse('https://admin.rise.ng/api/fetch_top/Vendor/10?'),
         headers: {
           "Accept": "application/json",
           'Authorization': 'Bearer $getToken'
@@ -242,7 +242,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
   void setNewPriceOffer(context, bookingID, title, description, amount) async {
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/accept-booking"),
+          Uri.parse("https://admin.rise.ng/api/booking/accept-booking"),
           body: {
             'booking_id': bookingID,
             'amount': bookingID,
@@ -294,7 +294,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
   void acceptOffer(context, bookingID, amount) async {
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/accept-booking"),
+          Uri.parse("https://admin.rise.ng/api/booking/accept-booking"),
           body: {'booking_id': bookingID, 'amount': bookingID});
 
       if (response.statusCode == 200) {

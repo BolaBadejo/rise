@@ -42,7 +42,8 @@ final passwordValidator = MultiValidator(
 final phoneNumberValidator = MultiValidator(
   [
     RequiredValidator(errorText: 'phone is required'),
-    MinLengthValidator(11, errorText: 'phone number must be at least 11 digits long'),
+    MinLengthValidator(11,
+        errorText: 'phone number must be at least 11 digits long'),
     // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
     //     errorText: 'passwords must have at least one special character')
   ],
@@ -51,7 +52,8 @@ final phoneNumberValidator = MultiValidator(
 final tokenValidator = MultiValidator(
   [
     RequiredValidator(errorText: 'token is required'),
-    MinLengthValidator(6, errorText: 'token should not be more than 6 digits long'),
+    MinLengthValidator(6,
+        errorText: 'token should not be more than 6 digits long'),
     // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
     //     errorText: 'passwords must have at least one special character')
   ],
@@ -59,7 +61,7 @@ final tokenValidator = MultiValidator(
 
 // const apiBaseUrl = "http://178.62.29.92";
 const testUrl = "178.62.29.92/api";
-const apiBaseUrl = "https://test.rise.ng/api";
+const apiBaseUrl = "https://admin.rise.ng/api";
 const mapApiKey = "AIzaSyCKSLC39xq_jZaQ_J65K9FItsFrXWSz1PA";
 
 List<String> listingCategoryList = [

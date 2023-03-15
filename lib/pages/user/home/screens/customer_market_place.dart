@@ -68,7 +68,7 @@ class _CustomerMarketPlaceState extends State<CustomerMarketPlace> {
     try {
       final response = await get(
           Uri.parse(
-              'https://test.rise.ng/api/listing/fetch/6.537055/3.3703183333333335/$distance/$ignore'),
+              'https://admin.rise.ng/api/listing/fetch/6.537055/3.3703183333333335/$distance/$ignore'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -94,7 +94,7 @@ class _CustomerMarketPlaceState extends State<CustomerMarketPlace> {
 
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/listing/findListing-by-name"),
+          Uri.parse("https://admin.rise.ng/api/listing/findListing-by-name"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'

@@ -55,7 +55,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     try {
       final response = await get(
-          Uri.parse('https://test.rise.ng/api/resend/verification/token'),
+          Uri.parse('https://admin.rise.ng/api/resend/verification/token'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -131,7 +131,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/verify-email/token"),
+          Uri.parse("https://admin.rise.ng/api/verify-email/token"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

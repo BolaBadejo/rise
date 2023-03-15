@@ -79,16 +79,17 @@ class NewListingState extends State<NewListing> {
 
     List<String> tags2 = tags.split(",");
     try {
-      Response response =
-          await post(Uri.parse("https://test.rise.ng/api/listing/new "), body: {
-        'category': category,
-        'service_offering': serviceOffering,
-        'serviceTitle': serviceTitle,
-        'description': description,
-        'tags': tags2.toString(),
-        'images': files.toString(),
-        'minimum_service_offer': minimumServiceOffer
-      });
+      Response response = await post(
+          Uri.parse("https://admin.rise.ng/api/listing/new "),
+          body: {
+            'category': category,
+            'service_offering': serviceOffering,
+            'serviceTitle': serviceTitle,
+            'description': description,
+            'tags': tags2.toString(),
+            'images': files.toString(),
+            'minimum_service_offer': minimumServiceOffer
+          });
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());

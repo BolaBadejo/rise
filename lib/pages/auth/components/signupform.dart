@@ -38,7 +38,7 @@ class SignUpFormState extends State<SignUpForm> {
     EasyLoading.show();
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/auth/generate-otp"),
+          Uri.parse("https://admin.rise.ng/api/auth/generate-otp"),
           body: {'phone_number': number});
       var data = jsonDecode(response.body.toString());
       if (response.statusCode == 200) {

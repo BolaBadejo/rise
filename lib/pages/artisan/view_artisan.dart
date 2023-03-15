@@ -41,7 +41,7 @@ class _ViewArtisanDetailScreenState extends State<ViewArtisanDetailScreen> {
     try {
       final response = await get(
           Uri.parse(
-              'https://test.rise.ng/api/user-listings/${widget.dataModel['id']}/10'),
+              'https://admin.rise.ng/api/user-listings/${widget.dataModel['id']}/10'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'

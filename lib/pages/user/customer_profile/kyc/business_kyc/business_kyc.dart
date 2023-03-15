@@ -82,7 +82,7 @@ class BusinessKYCState extends State<BusinessKYC> {
       uni = true;
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/kyc/save-business-verification"),
+          Uri.parse("https://admin.rise.ng/api/kyc/save-business-verification"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'
@@ -157,7 +157,7 @@ class BusinessKYCState extends State<BusinessKYC> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       final request = http.MultipartRequest('POST',
-          Uri.parse('https://test.rise.ng/api/kyc/upload-address-snapshot'));
+          Uri.parse('https://admin.rise.ng/api/kyc/upload-address-snapshot'));
       request.headers.addAll(
           {"Accept": "application/json", 'Authorization': 'Bearer $getToken'});
       request.files

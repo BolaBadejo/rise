@@ -61,7 +61,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
     try {
       final response = await get(
           Uri.parse(
-              'https://test.rise.ng/api/user-listings/${widget.dataModel['id']}/10'),
+              'https://admin.rise.ng/api/user-listings/${widget.dataModel['id']}/10'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -116,7 +116,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
     // print('this is price now: $value');
     try {
       Response response = await post(
-          Uri.parse("https://test.rise.ng/api/booking/new"),
+          Uri.parse("https://admin.rise.ng/api/booking/new"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -212,7 +212,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
     try {
       Response response = await post(
           Uri.parse(
-              "https://test.rise.ng/api/payment/initialize/direct-purchase"),
+              "https://admin.rise.ng/api/payment/initialize/direct-purchase"),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
