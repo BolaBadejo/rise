@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
+import 'package:rise/accountverifictionscreen.dart';
 import 'package:rise/business_logic/get_auth_user/get_auth_user_bloc.dart';
 import 'package:rise/constants.dart';
 import 'package:rise/widgets/custom_snack_bar.dart';
@@ -58,7 +59,7 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
     // print(
     // "$fullName - $number - $password - $passwordConfirmation - $email - $userType");
     try {
-      if (ref != null) {
+      if (ref == null) {
         response = await post(
             Uri.parse("https://admin.rise.ng/api/auth/register"),
             body: {
@@ -102,7 +103,7 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
         EasyLoading.dismiss();
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const VerifyEmail(where: 'registration'),
+            builder: (context) => const AccountVerificationScreen(),
           ),
         );
         // print(data['message']);

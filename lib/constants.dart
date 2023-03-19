@@ -59,8 +59,8 @@ final tokenValidator = MultiValidator(
   ],
 );
 
-// const apiBaseUrl = "http://178.62.29.92";
-const testUrl = "178.62.29.92/api";
+// const apiBaseUrl = "https://admin.rise.ng";
+const testUrl = "https://admin.rise.ng/api";
 const apiBaseUrl = "https://admin.rise.ng/api";
 const mapApiKey = "AIzaSyCKSLC39xq_jZaQ_J65K9FItsFrXWSz1PA";
 

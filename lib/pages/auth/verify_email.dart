@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:rise/constants.dart';
+import 'package:rise/pages/auth/signin_screen.dart';
 import 'package:rise/widgets/rise_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../data/model/login/login_response_model.dart';
-import '../user/customer_profile/kyc/bio_data_kyc/personal_info.dart';
 import 'accountverification/accountverifictionscreen.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -443,6 +441,31 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                   textColor: whiteColor,
                                 ),
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              widget.where == 'registration'
+                                  ? Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const SignInScreen()),
+                                                  (route) => false);
+                                        },
+                                        child: Text(
+                                          "Return to Login",
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.poppins(
+                                              color: primaryColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18.sp),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
                             ]),
                       ),
                     ],

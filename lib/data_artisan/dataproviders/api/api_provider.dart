@@ -14,7 +14,7 @@ import 'custom_exception.dart';
 
 class ApiProvider {
   final String _baseUrl = "https://admin.rise.ng/api";
-  // final String _baseUrl = "http://178.62.29.92";
+  // final String _baseUrl = "https://admin.rise.ng";
 
   Future<dynamic> get(String url) async {
     var responseJson;

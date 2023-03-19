@@ -1220,7 +1220,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   style: TextStyle(
                     // fontFamily: 'Chillax',
                     color: blackColor,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     fontSize: 14.sp,
                   ),
                 ),
@@ -1233,6 +1233,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10),
                       child: Container(
+                        padding: const EdgeInsets.all(15),
                         height: 13.h,
                         width: 100.w,
                         decoration: BoxDecoration(
@@ -1287,12 +1288,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       dataModel: vendor);
                                 })),
                             title: Text(
-                              vendor['full_name'] ?? '',
+                              vendor.fullname ?? '',
                               style: TextStyle(
                                 // fontFamily: 'Chillax',
                                 color: blackColor,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             leading: ProfilePicture(
@@ -1316,7 +1317,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   style: TextStyle(
                     // fontFamily: 'Chillax',
                     color: blackColor,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     fontSize: 14.sp,
                   ),
                 ),
@@ -1326,9 +1327,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               ),
               fetchedArtisans == null
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Container(
+                        padding: const EdgeInsets.all(15),
                         height: 13.h,
                         width: 100.w,
                         decoration: BoxDecoration(
@@ -1361,6 +1362,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       fontSize: 10.sp,
                                     ),
                                   ),
+                                  // WidgetSpan(
+                                  //   child: GestureDetector(
+                                  //     onTap: () {
+                                  //       // resend
+                                  //     },
+                                  //     child: Text(
+                                  //       "resend email",
+                                  //       style: TextStyle(
+                                  //         // fontFamily: 'Chillax',
+                                  //         color: secondaryColor,
+                                  //         fontWeight: FontWeight.w500,
+                                  //         fontSize: 10.sp,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -1387,7 +1404,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               style: TextStyle(
                                 // fontFamily: 'Chillax',
                                 color: blackColor,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 12.sp,
                               ),
                             ),
@@ -1402,7 +1419,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               color: primaryColor,
                             ));
                       }),
-              SizedBox(height: 60)
+              const SizedBox(
+                height: 60,
+              )
             ],
           ),
         ),

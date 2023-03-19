@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rise/constants.dart';
 import 'package:rise/pages/auth/signin_screen.dart';
+import 'package:rise/pages/auth/verify_email.dart';
 import 'package:rise/widgets/rise_button.dart';
 import 'package:sizer/sizer.dart';
 
@@ -48,13 +50,13 @@ class AccountVerificationScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: defaultPadding * 10.0),
-                Image.asset("assets/images/account_verification.png"),
+                Image.asset("assets/images/rise-check.gif"),
                 const SizedBox(height: defaultPadding * 2.0),
                 Center(
                   child: Text(
                     "Your account has\nbeen created\nsuccessfully!",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         color: primaryColor,
                         fontWeight: FontWeight.w500,
                         fontSize: 18.sp),
@@ -64,15 +66,37 @@ class AccountVerificationScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 32.0, left: 32.0),
                   child: RiseButton(
-                    text: "Return to Login",
-                    buttonColor: secondaryColor,
-                    textColor: primaryColor,
+                    text: "verify email",
+                    buttonColor: blackColor,
+                    textColor: whiteColor,
                     onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const VerifyEmail(where: 'registration')),
+                          (route) => false);
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const SignInScreen()),
                           (route) => false);
                     },
+                    child: Text(
+                      "Return to Login",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18.sp),
+                    ),
                   ),
                 ),
               ],

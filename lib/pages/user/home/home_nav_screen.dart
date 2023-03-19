@@ -10,7 +10,6 @@ import 'package:rise/pages/user/home/screens/orders.dart';
 import 'package:rise/pages/user/home/screens/customer_home.dart';
 
 import '../customer_profile/customer_profile_page.dart';
-import 'home_screen.dart';
 import 'screens/customer_market_place.dart';
 
 class HomeNavScreen extends StatefulWidget {
@@ -80,83 +79,6 @@ class HomeNavScreenState extends State<HomeNavScreen> {
               ),
               child: buildBottomNavigation(),
 
-              // BottomNavigationBar(
-              //   backgroundColor: blackColor,
-              //   selectedItemColor: primaryColor,
-              //   unselectedItemColor: grayColor,
-              //   showUnselectedLabels: false,
-              //   showSelectedLabels: false,
-              //   onTap: (index) {
-              //     setState(() {
-              //       selectedIndex = index;
-              //     });
-              //   },
-              //   currentIndex: selectedIndex,
-              //   items: const [
-              //     BottomNavigationBarItem(
-              //       backgroundColor: Colors.white,
-              //       icon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.deck,
-              //           color: grayColor,
-              //         ),
-              //       ),
-              //       activeIcon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.deck,
-              //           color: primaryColor,
-              //         ),
-              //       ),
-              //       label: "Home",
-              //     ),
-              //     BottomNavigationBarItem(
-              //       backgroundColor: Colors.white,
-              //       icon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.storefront,
-              //           color: grayColor,
-              //         ),
-              //       ),
-              //       activeIcon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.storefront,
-              //           color: primaryColor,
-              //         ),
-              //       ),
-              //       label: "Market",
-              //     ),
-              //     BottomNavigationBarItem(
-              //       icon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.bookmark_added,
-              //           color: grayColor,
-              //         ),
-              //       ),
-              //       activeIcon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.bookmark_added,
-              //           color: primaryColor,
-              //         ),
-              //       ),
-              //       label: "Orders",
-              //     ),
-              //     BottomNavigationBarItem(
-              //       icon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.person_pin,
-              //           color: grayColor,
-              //         ),
-              //       ),
-              //       activeIcon: SizedBox.shrink(
-              //         child: Icon(
-              //           Icons.person_pin,
-              //           color: primaryColor,
-              //         ),
-              //       ),
-              //       label: "profile",
-              //     ),
-              //   ],
-              // ),
             ),
           )),
     );
@@ -185,12 +107,6 @@ class HomeNavScreenState extends State<HomeNavScreen> {
               activeColor: whiteColor,
               inactiveColor: Colors.grey,
               textAlign: TextAlign.center),
-          // BottomNavyBarItem(
-          //     icon: Icon(Icons.calendar_view_day_outlined),
-          //     title: Text("Study Guide"),
-          //     activeColor: Colors.blue,
-          //     inactiveColor: Colors.grey,
-          //     textAlign: TextAlign.center),
           BottomNavyBarItem(
               icon: Icon(Icons.person_pin),
               title: Text("Profile"),

@@ -66,7 +66,7 @@ class SignInFormState extends State<SignInForm> {
     String getToken = sharedPreference.get('access_token').toString();
     try {
       Response response = await post(
-          Uri.parse("http:/?178.62.29.92/api/auth/forgot-password"),
+          Uri.parse("https://admin.rise.ng/api/auth/forgot-password"),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $getToken'

@@ -12,7 +12,7 @@ import 'custom_exception.dart';
 
 class ApiProvider {
   // final String _baseUrl = "https://admin.rise.ng/api";
-  final String _baseUrl = "http://178.62.29.92/api";
+  final String _baseUrl = "https://admin.rise.ng/api";
   final Dio _dio = Dio();
 
   Future<ListingsModel> fetchListings() async {

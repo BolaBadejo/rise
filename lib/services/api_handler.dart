@@ -532,7 +532,7 @@ class APIHandler {
   //   var val = "data";
   //
   //   var response =
-  //       await http.get(Uri.parse("  http:// 178.62.29.92/api/kyc/progress"));
+  //       await http.get(Uri.parse("  https://admin.rise.ng/api/kyc/progress"));
   //   var res = jsonDecode(response.body);
   //   print("response ${jsonDecode(response.body)}");
   //   List<dynamic> result = res[val][val];
@@ -594,7 +594,7 @@ class APIHandler {
   //   var val = "data";
   //
   //   var response = await http.get(Uri.parse(
-  //       "http:// 178.62.29.92/api/payment/verify/${payment_reference}"));
+  //       "https://admin.rise.ng/api/payment/verify/${payment_reference}"));
   //   var res = jsonDecode(response.body);
   //   print("response ${jsonDecode(response.body)}");
   //   List<dynamic> result = res[val][val];
@@ -611,7 +611,7 @@ class APIHandler {
   //   var val = "data";
   //
   //   var response = await http
-  //       .get(Uri.parse("http:// 178.62.29.92/api/payment/withdrawal-pin"));
+  //       .get(Uri.parse("https://admin.rise.ng/api/payment/withdrawal-pin"));
   //   var res = jsonDecode(response.body);
   //   print("response ${jsonDecode(response.body)}");
   //   List<dynamic> result = res[val][val];
