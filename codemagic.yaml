@@ -36,7 +36,8 @@ workflows:
       - name: PUB GET
         script: flutter packages pub get
       - name: Flutter build ipa and automatic versioning
-        script: xcode-project build-ipa --workspace "ios/Runner.xcworkspace" --scheme "Runner"
+        script: |
+          flutter build ipa --export-options-plist ios/export.plist --build-number=5 --build-name=1.0.0 --release
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
