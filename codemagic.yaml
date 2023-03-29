@@ -18,7 +18,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - mobile@rise.ng
+          - mobile.developer@rise.ng
           - bolarinwabadejo@gmail.com
           - riseapp.ng@gmail.com
 
@@ -30,6 +30,8 @@ workflows:
           - new_build_profile
         certificates:
           - New Build
+    integrations: 
+      app_store_connect: Olawunmi Oyedeji
     scripts:
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
@@ -41,6 +43,9 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
+      app_store_connect:
+        app: integration
+        submit_to_app_store: true
       email:
         recipients:
           - mobile@rise.ng
