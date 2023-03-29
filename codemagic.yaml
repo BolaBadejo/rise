@@ -29,7 +29,7 @@ workflows:
         provisioning_profiles:
           - new_build_profile
         certificates:
-          - Olawunmi Oyedeji
+          - New Build
     scripts:
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
