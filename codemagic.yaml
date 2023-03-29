@@ -26,9 +26,9 @@ workflows:
     environment:
       ios_signing:
         provisioning_profiles:
-          - ProvProfile_rise
+          - new_build_profile
         certificates:
-          - Distribute_Certificate
+          - Olawunmi Oyedeji
     scripts:
       - script: xcode project use-profiles
       - script: flutter packages pub get
