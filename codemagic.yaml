@@ -21,7 +21,7 @@ workflows:
           - mobile@rise.ng
           - bolarinwabadejo@gmail.com
           - riseapp.ng@gmail.com
-          
+
   ios-method-2:
     name: Rise Workflow 2
     environment:
@@ -31,8 +31,10 @@ workflows:
         certificates:
           - Olawunmi Oyedeji
     scripts:
-      - script: xcode project use-profiles
-      - script: flutter packages pub get
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+      - name: PUB GET
+        script: flutter packages pub get
       - name: Flutter build ipa and automatic versioning
         script: /
           flutter build ipa --export-options-plist=/Users/builder/export_options.plist
