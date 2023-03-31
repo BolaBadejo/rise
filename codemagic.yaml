@@ -38,8 +38,9 @@ workflows:
       - name: PUB GET
         script: flutter packages pub get
       - name: Flutter build ipa and automatic versioning
-        script: |
-          flutter build ipa --export-options-plist=/Users/builder/export_options.plist
+        script: /
+        CURRENT_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_ID")
+          flutter build ipa --release --build-number=$(($CURRENT_BUILD_NUMBER + 1)) --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
