@@ -25,6 +25,8 @@ workflows:
   ios-method-2:
     name: Rise Workflow 2
     environment:
+      groups:
+        - app_store_credentials
       ios_signing:
         provisioning_profiles:
           - new_build_profile
