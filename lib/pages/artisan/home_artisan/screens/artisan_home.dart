@@ -1839,22 +1839,6 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
                                       fontSize: 10.sp,
                                     ),
                                   ),
-                                  // WidgetSpan(
-                                  //   child: GestureDetector(
-                                  //     onTap: () {
-                                  //       // resend
-                                  //     },
-                                  //     child: Text(
-                                  //       "resend email",
-                                  //       style: TextStyle(
-                                  //         // fontFamily: 'Chillax',
-                                  //         color: secondaryColor,
-                                  //         fontWeight: FontWeight.w500,
-                                  //         fontSize: 10.sp,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),

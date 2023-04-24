@@ -158,7 +158,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         });
         // print("this is VENDORRRRRRRR : ${data['data']}");
         // print("this is VENDORRRRRRRR : ${data['data']['data']}");
-        // print(data);
+        print(fetchedVendors);
         // print('Vendors ${response.statusCode}');
       } else {
         // print(response.statusCode);
@@ -965,254 +965,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              // fetchedListings == null
-              //     ? Padding(
-              //         padding: const EdgeInsets.symmetric(
-              //             horizontal: 20.0, vertical: 10),
-              //         child: Container(
-              //           padding: const EdgeInsets.all(15),
-              //           height: 16.h,
-              //           width: 100.w,
-              //           decoration: BoxDecoration(
-              //             color: grayColor,
-              //             borderRadius: BorderRadius.circular(25.0),
-              //           ),
-              //           child: Column(
-              //             mainAxisAlignment: MainAxisAlignment.start,
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text(
-              //                 "Offers so good you have to check them out",
-              //                 style: TextStyle(
-              //                   // fontFamily: 'Chillax',
-              //                   color: blackColor,
-              //                   fontWeight: FontWeight.w600,
-              //                   fontSize: 11.sp,
-              //                 ),
-              //               ),
-              //               SizedBox(
-              //                 height: 10,
-              //               ),
-              //               RichText(
-              //                 text: TextSpan(
-              //                   children: [
-              //                     TextSpan(
-              //                       text:
-              //                           "we are checking if there are special offers for you.",
-              //                       // overflow: TextOverflow.ellipsis,
-              //                       style: GoogleFonts.poppins(
-              //                         // fontFamily: 'Chillax',
-              //                         color: whiteColor,
-              //                         fontWeight: FontWeight.w600,
-              //                         fontSize: 9.sp,
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       )
-              //     : fetchedListings.length == 0
-              //         ? Padding(
-              //             padding: const EdgeInsets.symmetric(
-              //                 horizontal: 20.0, vertical: 10),
-              //             child: Container(
-              //               padding: const EdgeInsets.all(15),
-              //               height: 12.h,
-              //               width: 100.w,
-              //               decoration: BoxDecoration(
-              //                 color: grayColor,
-              //                 borderRadius: BorderRadius.circular(25.0),
-              //               ),
-              //               child: Column(
-              //                 mainAxisAlignment: MainAxisAlignment.start,
-              //                 crossAxisAlignment: CrossAxisAlignment.start,
-              //                 children: [
-              //                   Text(
-              //                     "You have no offers today.",
-              //                     style: TextStyle(
-              //                       // fontFamily: 'Chillax',
-              //                       color: blackColor,
-              //                       fontWeight: FontWeight.w600,
-              //                       fontSize: 12.sp,
-              //                     ),
-              //                   ),
-              //                   SizedBox(
-              //                     height: 0,
-              //                   ),
-              //                   GestureDetector(
-              //                     onTap: () {
-              //                       // shareFile();
-              //                     },
-              //                     child: RichText(
-              //                       text: TextSpan(
-              //                         children: [
-              //                           TextSpan(
-              //                             text:
-              //                                 "Tap to tell your friends you are on Rise.",
-              //                             // overflow: TextOverflow.ellipsis,
-              //                             style: GoogleFonts.poppins(
-              //                               // fontFamily: 'Chillax',
-              //                               color: whiteColor,
-              //                               fontWeight: FontWeight.w600,
-              //                               fontSize: 10.sp,
-              //                             ),
-              //                           ),
-              //                           WidgetSpan(
-              //                               child: Icon(Icons.share_location)),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           )
-              //         : Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Padding(
-              //                 padding: const EdgeInsets.only(
-              //                     left: 20.0, right: 20.0),
-              //                 child: Row(
-              //                   mainAxisAlignment:
-              //                       MainAxisAlignment.spaceBetween,
-              //                   children: [
-              //                     Text(
-              //                       "Today's offers",
-              //                       style: TextStyle(
-              //                         // fontFamily: 'Chillax',
-              //                         color: blackColor,
-              //                         fontWeight: FontWeight.w600,
-              //                         fontSize: 14.sp,
-              //                       ),
-              //                     ),
-              //                     Text(
-              //                       "view all",
-              //                       style: TextStyle(
-              //                         // fontFamily: 'Chillax',
-              //                         color: primaryColor,
-              //                         fontWeight: FontWeight.w500,
-              //                         fontSize: 12.sp,
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //               ),
-              //               SizedBox(
-              //                 height: 15.h,
-              //                 child: ListView.builder(
-              //                   itemCount: fetchedListings.length,
-              //                   scrollDirection: Axis.horizontal,
-              //                   itemBuilder: (context, index) {
-              //                     return GestureDetector(
-              //                       onTap: (() => Navigator.push(context,
-              //                               MaterialPageRoute(
-              //                                   builder: (context) {
-              //                             return ProductDetailScreen(
-              //                               dataModel: fetchedListings[index],
-              //                               // imageUrl: fetchedListings[index]
-              //                               // .listingImages![0],
-              //                               index: index,
-              //                             );
-              //                           }))),
-              //                       child: Container(
-              //                           width: 350,
-              //                           margin: const EdgeInsets.symmetric(
-              //                               horizontal: 10, vertical: 10),
-              //                           padding: const EdgeInsets.symmetric(
-              //                               horizontal: 20, vertical: 20),
-              //                           decoration: BoxDecoration(
-              //                             boxShadow: [
-              //                               BoxShadow(
-              //                                 color: grayColor.withOpacity(0.3),
-              //                                 offset: const Offset(
-              //                                   3.0,
-              //                                   3.0,
-              //                                 ),
-              //                                 blurRadius: 5.0,
-              //                                 spreadRadius: 2.0,
-              //                               ), //BoxShadow
-              //                             ],
-              //                             borderRadius:
-              //                                 BorderRadius.circular(30),
-              //                             color: whiteColor,
-              //                           ),
-              //                           child: Row(
-              //                             mainAxisAlignment:
-              //                                 MainAxisAlignment.start,
-              //                             crossAxisAlignment:
-              //                                 CrossAxisAlignment.center,
-              //                             children: [
-              //                               AspectRatio(
-              //                                 aspectRatio: 16 / 12,
-              //                                 child: CachedNetworkImage(
-              //                                   fit: BoxFit.cover,
-              //                                   imageUrl: fetchedListings[index]
-              //                                       .listingImages![0],
-              //                                   placeholder: (context, url) =>
-              //                                       new CircularProgressIndicator(),
-              //                                   errorWidget:
-              //                                       (context, url, error) =>
-              //                                           new Icon(Icons.error),
-              //                                 ),
-              //                               ),
-              //                               const SizedBox(
-              //                                 width: 10,
-              //                               ),
-              //                               Column(
-              //                                 mainAxisAlignment:
-              //                                     MainAxisAlignment.end,
-              //                                 crossAxisAlignment:
-              //                                     CrossAxisAlignment.start,
-              //                                 children: [
-              //                                   Text(
-              //                                     fetchedListings[index].title!,
-              //                                     style: TextStyle(
-              //                                       // fontFamily: 'Chillax',
-              //                                       color: blackColor,
-              //                                       fontWeight: FontWeight.w500,
-              //                                       fontSize: 12.sp,
-              //                                     ),
-              //                                   ),
-              //                                   Text(
-              //                                     " ${fetchedListings[index].serviceOffering!}",
-              //                                     style: TextStyle(
-              //                                       // fontFamily: 'Chillax',
-              //                                       color: grayColor,
-              //                                       fontWeight: FontWeight.w500,
-              //                                       fontSize: 9.sp,
-              //                                     ),
-              //                                   ),
-              //                                   Expanded(
-              //                                     flex: 1,
-              //                                     child: Container(),
-              //                                   ),
-              //                                   Text(
-              //                                     fetchedListings[index]
-              //                                         .minimumOffer!,
-              //                                     style: TextStyle(
-              //                                       // fontFamily: 'Chillax',
-              //                                       color: blackColor,
-              //                                       fontWeight: FontWeight.w500,
-              //                                       fontSize: 18.sp,
-              //                                     ),
-              //                                   ),
-              //                                 ],
-              //                               ),
-              //                             ],
-              //                           )),
-              //                     );
-              //                   },
-              //                 ),
-              //               ),
-              //               const SizedBox(
-              //                 height: 20,
-              //               ),
-              //             ],
-              //           ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Text(
@@ -1281,6 +1033,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       itemCount: fetchedVendors.length,
                       itemBuilder: (BuildContext context, int index) {
                         var vendor = fetchedVendors[index];
+                        print(vendor);
                         return ListTile(
                             onTap: () => Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
@@ -1288,7 +1041,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       dataModel: vendor);
                                 })),
                             title: Text(
-                              vendor.fullname ?? '',
+                              vendor['full_name'] ?? '',
                               style: TextStyle(
                                 // fontFamily: 'Chillax',
                                 color: blackColor,

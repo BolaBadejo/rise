@@ -14,6 +14,7 @@ import 'package:rise/data/model/logout/logout_response_model.dart';
 import 'package:rise/data_artisan/dataproviders/api/api_provider.dart';
 import 'package:rise/pages/auth/signin_screen.dart';
 import 'package:rise/pages/user/customer_profile/kyc/user-kyc.dart';
+import 'package:rise/pages/user/customer_profile/pickup_address.dart';
 import 'package:rise/pages/user/home/account_type_selection.dart';
 import 'package:rise/services/api_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1045,6 +1046,48 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                                         ),
                                         TextSpan(
                                           text: "  Bio Data / KYC",
+                                          // overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            // fontFamily: 'Chillax',
+                                            color: blackColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: (() => Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return PickUpAddressPage();
+                                }))),
+                            child: Container(
+                              height: 7.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.h),
+                                color: grayColor.withOpacity(0.2),
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const WidgetSpan(
+                                          child: Icon(Icons.location_city,
+                                              size: 18),
+                                        ),
+                                        TextSpan(
+                                          text: "  Set Pickup address",
                                           // overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.poppins(
                                             // fontFamily: 'Chillax',

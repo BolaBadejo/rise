@@ -587,19 +587,69 @@ class NewListingState extends State<NewListing> {
                                     );
                                   }).toList(),
                                 ),
-                                // ),
-                                // items: listingCategoryList
-                                //     .map<DropdownMenuItem<String>>(
-                                //         (valueItem) {
-                                //   return DropdownMenuItem(
-                                //     value: valueItem,
-                                //     child: Text(valueItem),
-                                //     onTap: () {
-                                //       category = valueItem;
-                                //     },
-                                //   );
-                                // }).toList(),
-                                // ),
+                              ),
+
+                              const SizedBox(height: 20.0),
+
+                              Text(
+                                "Sub Category",
+                                style: GoogleFonts.poppins(
+                                  // fontFamily: 'Chillax',
+                                  color: blackColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 16, right: 16, top: 3, bottom: 3),
+                                decoration: BoxDecoration(
+                                    color: whiteColor.withOpacity(0.29),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    border: const Border(
+                                      top: BorderSide(
+                                          width: 2, color: grayColor),
+                                      left: BorderSide(
+                                          width: 2, color: grayColor),
+                                      right: BorderSide(
+                                          width: 2, color: grayColor),
+                                      bottom: BorderSide(
+                                          width: 2, color: grayColor),
+                                    )),
+                                child: DropdownButton(
+                                  hint: Text(
+                                    "Select Listing Sub-Category",
+                                    style: GoogleFonts.poppins(
+                                      // fontFamily: 'Outfit',
+                                      fontSize: 12,
+                                      color: grayColor.withOpacity(0.9),
+                                    ),
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 22,
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black, fontSize: 16),
+                                  value: selectedListing,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedListing = newValue;
+                                    });
+                                  },
+                                  items: listingCategoryList
+                                      .map<DropdownMenuItem<String>>(
+                                          (valueItem) {
+                                    return DropdownMenuItem(
+                                      value: valueItem,
+                                      child: Text(valueItem),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
 
                               const SizedBox(height: 20.0),
