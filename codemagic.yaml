@@ -29,9 +29,9 @@ workflows:
         provisioning_profiles:
           - rise_build
         certificates:
-          - Olawunmi Oyedeji
+          - New Build
     integrations: 
-      app_store_connect: Olawunmi Oyedeji
+      app_store_connect: New Build
     scripts:
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
