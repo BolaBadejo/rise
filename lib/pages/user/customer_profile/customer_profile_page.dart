@@ -19,6 +19,7 @@ import 'package:rise/pages/user/home/account_type_selection.dart';
 import 'package:rise/services/api_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:rise/data/model/login/login_response_model.dart';
 import '../../../data/model/get_auth_user/get_auth_user_response_model.dart';
@@ -48,6 +49,165 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   final TextEditingController withdrawPasswordEditingController =
       TextEditingController();
 
+  void showRefCode(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            // <-- SEE HERE
+            borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        )),
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.8,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 20.0,
+                    right: 20,
+                    top: 30,
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "Your Referal Code is",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            refToken,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              // fontFamily: 'Chillax',
+                              color: blackColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          GestureDetector(
+                              onTap: () async {
+                                Navigator.pop(context);
+                                await Clipboard.setData(
+                                        ClipboardData(text: refToken))
+                                    .then((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: blackColor,
+                                          dismissDirection: DismissDirection.up,
+                                          content: Text(
+                                              "Referal code copied to clipboard")));
+                                });
+                              },
+                              child: const Icon(
+                                Icons.copy,
+                                size: 13,
+                              ))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "or try the weblink below.",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 5.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20.0, right: 20.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "https://app.rise.ng/auth/register?ref=$refToken",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                    // fontFamily: 'Chillax',
+                                    color: blackColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 8.sp,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      await Clipboard.setData(ClipboardData(
+                                              text:
+                                                  "https://app.rise.ng/auth/register?ref=$refToken"))
+                                          .then((_) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                backgroundColor: blackColor,
+                                                content: Text(
+                                                    "Referal code copied to clipboard")));
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.copy,
+                                      size: 13,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      QrImage(
+                        data: "https://app.rise.ng/auth/register?ref=$refToken",
+                        version: QrVersions.auto,
+                        size: 120.sp,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+        });
+  }
+
   void editBusiness(context, address, name) async {
     EasyLoading.show();
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
@@ -73,7 +233,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -93,7 +253,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -146,7 +306,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -166,7 +326,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -222,7 +382,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -242,7 +402,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -291,7 +451,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Sent',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -310,7 +470,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -366,7 +526,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -386,7 +546,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -666,16 +826,16 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 ),
                 GestureDetector(
                     onTap: () async {
-                      await Clipboard.setData(
-                              ClipboardData(text: userData.referralToken))
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                backgroundColor: blackColor,
-                                content:
-                                    Text("Referal code copied to clipboard")));
-                      });
-                      ;
+                      showRefCode(context);
+                      // await Clipboard.setData(ClipboardData(text: refToken))
+                      //     .then((_) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //       const SnackBar(
+                      //           backgroundColor: blackColor,
+                      //           content:
+                      //               Text("Referal code copied to clipboard")));
+                      // });
+                      // ;
                       // copied successfully
                     },
                     child: const Icon(
@@ -984,42 +1144,42 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            height: 7.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.h),
-                              color: grayColor.withOpacity(0.2),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      const WidgetSpan(
-                                        child:
-                                            Icon(Icons.notifications, size: 18),
-                                      ),
-                                      TextSpan(
-                                        text: "  Notifications",
-                                        // overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                          // fontFamily: 'Chillax',
-                                          color: blackColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          // Container(
+                          //   height: 7.h,
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(6.h),
+                          //     color: grayColor.withOpacity(0.2),
+                          //   ),
+                          //   child: Align(
+                          //     alignment: Alignment.centerLeft,
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.only(left: 20.0),
+                          //       child: RichText(
+                          //         text: TextSpan(
+                          //           children: [
+                          //             const WidgetSpan(
+                          //               child:
+                          //                   Icon(Icons.notifications, size: 18),
+                          //             ),
+                          //             TextSpan(
+                          //               text: "  Notifications",
+                          //               // overflow: TextOverflow.ellipsis,
+                          //               style: GoogleFonts.poppins(
+                          //                 // fontFamily: 'Chillax',
+                          //                 color: blackColor,
+                          //                 fontWeight: FontWeight.w500,
+                          //                 fontSize: 14.sp,
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // const SizedBox(
+                          //   height: 20,
+                          // ),
                           GestureDetector(
                             onTap: (() => Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {

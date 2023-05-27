@@ -88,7 +88,7 @@ class BankDataKYCState extends State<BankDataKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verified',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,
@@ -118,7 +118,7 @@ class BankDataKYCState extends State<BankDataKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.failure,

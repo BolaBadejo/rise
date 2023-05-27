@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:rise/constants.dart';
@@ -8,6 +10,8 @@ import 'package:rise/widgets/rise_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
+
+import 'customer_profile_page.dart';
 
 class PickUpAddressPage extends StatefulWidget {
   const PickUpAddressPage({Key? key}) : super(key: key);
@@ -31,6 +35,90 @@ class PickUpAddressPageState extends State<PickUpAddressPage> {
 
   var selectedLocation;
 
+  void savePickUp(route) async {
+    EasyLoading.show();
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    int country_id = 166;
+    try {
+      Response response = await post(
+          Uri.parse("https://admin.rise.ng/api/pick_up/add-my-routes"),
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $getToken'
+          },
+          body: {
+            'route': route,
+            // 'state_id': s
+          });
+
+      var data = jsonDecode(response.body.toString());
+      print(response.statusCode.toString());
+      // print(data);
+
+      if (response.statusCode == 200) {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Saved!',
+            message: data['message'].toString(),
+            contentType: ContentType.success,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        EasyLoading.dismiss();
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const CustomerProfilePage()));
+
+        // print(data['message']);
+        // print("done successfully");
+      } else {
+        var data = jsonDecode(response.body.toString());
+        EasyLoading.dismiss();
+
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'error ${response.statusCode.toString()}',
+            message: data['message'].toString(),
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } catch (e) {
+      // print(e.toString());
+      EasyLoading.dismiss();
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: 'Something went wrong',
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  }
+
   Future<void> getLocations() async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
@@ -38,7 +126,7 @@ class PickUpAddressPageState extends State<PickUpAddressPage> {
 
     try {
       final response = await get(
-          Uri.parse('http://admin.rise.ng/api/pick_up/routes'),
+          Uri.parse('https://admin.rise.ng/api/pick_up/routes'),
           headers: {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
@@ -54,7 +142,7 @@ class PickUpAddressPageState extends State<PickUpAddressPage> {
         print(response);
         // print("States fetched");
         setState(() {
-          locationList = data['data']['states'];
+          locationList = data['data']['availablePickUPRoutes'];
           // print(lgaList);
         });
       } else {}
@@ -178,8 +266,8 @@ class PickUpAddressPageState extends State<PickUpAddressPage> {
                                             //   state_id = valueItem['id'];
                                             // });
                                           },
-                                          value: valueItem['name'],
-                                          child: Text(valueItem['name']),
+                                          value: valueItem,
+                                          child: Text(valueItem),
                                         );
                                       }).toList(),
                                     ),
@@ -195,9 +283,7 @@ class PickUpAddressPageState extends State<PickUpAddressPage> {
                                   text: "Save Pickup Address",
                                   buttonColor: blackColor,
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                    }
+                                    savePickUp(selectedLocation);
                                   },
                                   textColor: whiteColor,
                                 ),

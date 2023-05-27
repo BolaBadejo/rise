@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rise/constants.dart';
 import 'package:rise/pages/user/home/screens/orders.dart';
 import 'package:rise/pages/user/home/screens/customer_home.dart';

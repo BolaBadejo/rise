@@ -88,7 +88,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated successfully!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -108,7 +108,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -355,7 +355,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verification sent!!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -376,7 +376,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -472,7 +472,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -538,7 +538,7 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Successful',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );

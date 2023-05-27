@@ -291,7 +291,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verification sent!!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -312,7 +312,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

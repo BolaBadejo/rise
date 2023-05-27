@@ -78,7 +78,7 @@ class _ViewListingScreenState extends State<ViewListingScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Booking Created',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,
@@ -102,7 +102,7 @@ class _ViewListingScreenState extends State<ViewListingScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.failure,
@@ -173,7 +173,7 @@ class _ViewListingScreenState extends State<ViewListingScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

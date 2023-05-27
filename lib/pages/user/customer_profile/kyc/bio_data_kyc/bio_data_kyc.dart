@@ -56,89 +56,89 @@ class BioDataKYCState extends State<BioDataKYC> {
   static final TextEditingController phoneEditingController =
       TextEditingController();
 
-  void ninVerification(context, nin, phone) async {
-    // print('nin');
-    var number = "234${phone!.substring(1)}";
-    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
-    String getToken = sharedPreference.get('access_token').toString();
-    try {
-      Response response = await post(
-          Uri.parse("https://admin.rise.ng/api/kyc/verify/nin"),
-          headers: {
-            "Accept": "application/json",
-            'Authorization': 'Bearer $getToken'
-          },
-          body: {
-            'nin': nin,
-            'phone': '+$number'
-          });
-      var data = jsonDecode(response.body.toString());
-      if (response.statusCode == 200) {
-        final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Verified',
-            message: data['message'],
+  // void ninVerification(context, nin, phone) async {
+  //   // print('nin');
+  //   var number = "234${phone!.substring(1)}";
+  //   SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+  //   String getToken = sharedPreference.get('access_token').toString();
+  //   try {
+  //     Response response = await post(
+  //         Uri.parse("https://admin.rise.ng/api/kyc/verify/nin"),
+  //         headers: {
+  //           "Accept": "application/json",
+  //           'Authorization': 'Bearer $getToken'
+  //         },
+  //         body: {
+  //           'nin': nin,
+  //           'phone': '+$number'
+  //         });
+  //     var data = jsonDecode(response.body.toString());
+  //     if (response.statusCode == 200) {
+  //       final snackBar = SnackBar(
+  //         /// need to set following properties for best effect of awesome_snackbar_content
+  //         elevation: 0,
+  //         behavior: SnackBarBehavior.floating,
+  //         backgroundColor: Colors.transparent,
+  //         content: AwesomeSnackbarContent(
+  //           title: 'Verified',
+  //           message: data['message'].toString(),
 
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-            contentType: ContentType.success,
-          ),
-        );
+  //           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+  //           contentType: ContentType.success,
+  //         ),
+  //       );
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+  //       ScaffoldMessenger.of(context)
+  //         ..hideCurrentSnackBar()
+  //         ..showSnackBar(snackBar);
 
-        // print("done successfully");
-      } else {
-        // print('error ${response.statusCode.toString()}');
-        // print(data['message']);
-        EasyLoading.dismiss();
-        final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+  //       // print("done successfully");
+  //     } else {
+  //       // print('error ${response.statusCode.toString()}');
+  //       // print(data['message']);
+  //       EasyLoading.dismiss();
+  //       final snackBar = SnackBar(
+  //         /// need to set following properties for best effect of awesome_snackbar_content
+  //         elevation: 0,
+  //         behavior: SnackBarBehavior.floating,
+  //         backgroundColor: Colors.transparent,
+  //         content: AwesomeSnackbarContent(
+  //           title: 'error ${response.statusCode.toString()}',
+  //           message: data['message'].toString(),
 
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-            contentType: ContentType.failure,
-          ),
-        );
+  //           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+  //           contentType: ContentType.failure,
+  //         ),
+  //       );
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        // showCustomSnackBar(context, 'error ${response.statusCode.toString()}',
-        //     Colors.red, Colors.white);
-      }
-    } catch (e) {
-      // print(e.toString());
-      EasyLoading.dismiss();
-      final snackBar = SnackBar(
-        /// need to set following properties for best effect of awesome_snackbar_content
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error',
-          message: e.toString(),
+  //       ScaffoldMessenger.of(context)
+  //         ..hideCurrentSnackBar()
+  //         ..showSnackBar(snackBar);
+  //       // showCustomSnackBar(context, 'error ${response.statusCode.toString()}',
+  //       //     Colors.red, Colors.white);
+  //     }
+  //   } catch (e) {
+  //     // print(e.toString());
+  //     EasyLoading.dismiss();
+  //     final snackBar = SnackBar(
+  //       /// need to set following properties for best effect of awesome_snackbar_content
+  //       elevation: 0,
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.transparent,
+  //       content: AwesomeSnackbarContent(
+  //         title: 'Error',
+  //         message: e.toString(),
 
-          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-          contentType: ContentType.failure,
-        ),
-      );
+  //         /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+  //         contentType: ContentType.failure,
+  //       ),
+  //     );
 
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    }
-  }
+  //     ScaffoldMessenger.of(context)
+  //       ..hideCurrentSnackBar()
+  //       ..showSnackBar(snackBar);
+  //   }
+  // }
 
   void bvnVerification(context, bvn, phone) async {
     // print('bvn');
@@ -159,21 +159,13 @@ class BioDataKYCState extends State<BioDataKYC> {
       var data = jsonDecode(response.body.toString());
 
       if (response.statusCode == 200) {
-        // print(data);
-        // showCustomSnackBar(
-        //     context, data['message'], Colors.green, Colors.white);
-        // context.showToastySnackbar('error ${response.statusCode.toString()}',
-        // data['message'], AlertType.danger);
         final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verified',
-            message: data['message'],
-
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -188,21 +180,15 @@ class BioDataKYCState extends State<BioDataKYC> {
                       data: data['data'],
                       type: widget.type,
                     )));
-        // print("done successfully");
       } else {
-        // print('error ${response.statusCode.toString()}');
-        // print(data['message']);
         EasyLoading.dismiss();
         final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
-
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -210,22 +196,16 @@ class BioDataKYCState extends State<BioDataKYC> {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
-        // showCustomSnackBar(context, 'error ${response.statusCode.toString()}',
-        //     Colors.red, Colors.white);
       }
     } catch (e) {
-      // print(e.toString());
       EasyLoading.dismiss();
       final snackBar = SnackBar(
-        /// need to set following properties for best effect of awesome_snackbar_content
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         content: AwesomeSnackbarContent(
           title: 'Error',
           message: e.toString(),
-
-          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
           contentType: ContentType.failure,
         ),
       );
@@ -389,90 +369,12 @@ class BioDataKYCState extends State<BioDataKYC> {
                                     validator: phoneNumberValidator,
                                     // onSaved: (email) => loginRequest!.email = email!,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                                  // Column(
-                                  //   children: [
-                                  //     RadioListTile(
-                                  //       title: Text("BVN"),
-                                  //       value: "bvn",
-                                  //       groupValue: dropdownvalue,
-                                  //       onChanged: (value) {
-                                  //         setState(() {
-                                  //           dropdownvalue = value.toString();
-                                  //         });
-                                  //       },
-                                  //     ),
-                                  //     RadioListTile(
-                                  //       title: Text("NIN"),
-                                  //       value: "nin",
-                                  //       groupValue: dropdownvalue,
-                                  //       onChanged: (value) {
-                                  //         setState(() {
-                                  //           dropdownvalue = value.toString();
-                                  //         });
-                                  //       },
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // Row(
-                                  //   children: [
-                                  //     Row(
-                                  //       children: [
-                                  //         Radio(
-                                  //           value: "nin",
-                                  //           groupValue: dropdownvalue,
-                                  //           onChanged: (value) {
-                                  //             setState(() {
-                                  //               dropdownvalue =
-                                  //                   value.toString();
-                                  //             });
-                                  //           },
-                                  //         ),
-                                  //         Text(
-                                  //           "NIN ",
-                                  //           style: GoogleFonts.poppins(
-                                  //             // fontFamily: 'Chillax',
-                                  //             color: const Color(0xff201E1E)
-                                  //                 .withOpacity(0.6),
-                                  //             fontWeight: FontWeight.w500,
-                                  //             fontSize: 12.sp,
-                                  //           ),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //     Row(
-                                  //       children: [
-                                  //         Radio(
-                                  //             // title: Text("Yes"),
-                                  //             value: "bvn",
-                                  //             groupValue: dropdownvalue,
-                                  //             onChanged: (value) {
-                                  //               setState(() {
-                                  //                 dropdownvalue =
-                                  //                     value.toString();
-                                  //               });
-                                  //             }),
-                                  //         Text(
-                                  //           "BVN",
-                                  //           style: GoogleFonts.poppins(
-                                  //             // fontFamily: 'Chillax',
-                                  //             color: const Color(0xff201E1E)
-                                  //                 .withOpacity(0.6),
-                                  //             fontWeight: FontWeight.w500,
-                                  //             fontSize: 12.sp,
-                                  //           ),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ],
-                                  // ),
                                 ],
                               ),
                               const SizedBox(height: defaultPadding * 10.0),
-
-                              // const SizedBox(height: 30.0 * 2.0),
                               SizedBox(
                                 width: double.infinity,
                                 child: RiseButton(
@@ -481,29 +383,11 @@ class BioDataKYCState extends State<BioDataKYC> {
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
-                                      // showCustomSnackBar(
-                                      //     context,
-                                      //     'Listing created succssfully',
-                                      //     Colors.green,
-                                      //     Colors.white);
-                                      // Navigator.of(context).pop();
-                                      // if (dropdownvalue == 'nin') {
-                                      //   ninVerification(
-                                      //       context,
-                                      //       ninEditingController.text
-                                      //           .toString(),
-                                      //       phoneEditingController.text
-                                      //           .toString());
-                                      // } else if (dropdownvalue == 'bvn') {
                                       bvnVerification(
                                         context,
                                         ninEditingController.text.toString(),
                                         phoneEditingController.text.toString(),
                                       );
-                                      // }
-                                      //   registerNewUserRequest!.phoneNumber = widget.phoneNumber;
-                                      //   registerNewUserRequest?.userType = selectedAccountType;
-                                      //   BlocProvider.of<RegisterNewUserBloc>(context).add(LoadRegisterNewUserEvent(requestBody: registerNewUserRequest));
                                     }
                                   },
                                   textColor: whiteColor,

@@ -1,3 +1,8 @@
+// booking['listing_id'],
+// booking['bargained_amount'],
+// booking['task_id'],
+// booking['id']);
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -36,17 +41,135 @@ class _CustomerOrdersState extends State<CustomerOrders> {
       });
     });
     fetchUserBookings();
+    getDropOff();
     super.initState();
   }
+
+  var price = "N0.00";
+  var routeID = '--Route ID--';
 
   var fetchedBookings = [];
 
   var ongoingBookings = [];
   var options = ['Rejected', 'Arrived', 'Started', 'Completed', 'Cancelled'];
 
-  void payDirect(context, listing_id, price, task, bookingID) async {
+  var dropOffList = [];
+
+  var selectedDropOff;
+
+  var singleSelectedPickUp;
+
+  var routeDetail;
+
+  Future<void> selectRoute() async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
+    print('fetching route');
+
+    try {
+      Response response = await post(
+          Uri.parse("https://admin.rise.ng/api/pick_up/select-route"),
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $getToken'
+          },
+          body: {
+            'pick_up': selectedPickUp[0],
+            'drop_off': selectedDropOff,
+          });
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // userData = data['data']['user'];
+        // names = userData!.fullName!.split(' ');
+        print(response);
+        // print("States fetched");
+        setState(() {
+          routeDetail = data['data']['routesFee'];
+          // print(lgaList);
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  Future<void> getDropOff() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    print('fetching locations');
+
+    try {
+      final response = await get(
+          Uri.parse('https://admin.rise.ng/api/pick_up/drop-off-routes'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
+      print(getToken);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // userData = data['data']['user'];
+        // names = userData!.fullName!.split(' ');
+        print(response);
+        // print("States fetched");
+        setState(() {
+          dropOffList = data['data']['availableDropOffRoutes'];
+          // print(lgaList);
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  var selectedPickUp = [];
+
+  Future<void> getPickUp(id) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    print('fetching locations');
+
+    try {
+      final response = await get(
+          Uri.parse(
+              'https://admin.rise.ng/api/pick_up/find-listings-pick-up-route/${id.toString()}'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
+      print(getToken);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // userData = data['data']['user'];
+        // names = userData!.fullName!.split(' ');
+        print(response);
+        // print("States fetched");
+        setState(() {
+          selectedPickUp = data['data']['vendorAvailablePickUps'];
+          // print(lgaList);
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  void payDirectWithRoute(
+      ctxt, listing_id, route, price, task, bookingID, booking) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    EasyLoading.show();
+    print("this is $price");
+    print('make payment sup');
     try {
       Response response = await post(
           Uri.parse("https://admin.rise.ng/api/payment/initialize/purchase"),
@@ -59,36 +182,21 @@ class _CustomerOrdersState extends State<CustomerOrders> {
             'task_id': task,
             'amount': price.toString(),
             'booking_id': bookingID.toString(),
+            'route_id': route.toString(),
           });
       var data = jsonDecode(response.body.toString());
-      // print(data);
+      print(data);
       if (response.statusCode == 200) {
         // print(data);
         // print(data['data']);
-        // Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return PaymentScreen(
-            link: data['data']['payment_url'],
-          );
-        }));
-
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Payment initialized!!',
-            message: data['message'],
-            contentType: ContentType.success,
-          ),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        // print(data);
-
-        // print("done successfully");
+        EasyLoading.dismiss();
+        Navigator.pop(context);
+        showOffer(
+            context,
+            data['message'],
+            data['data']['data']['data']['authorization_url'],
+            booking['title'],
+            booking['description']);
       } else {
         // print('error ${response.statusCode.toString()}');
         EasyLoading.dismiss();
@@ -99,15 +207,13 @@ class _CustomerOrdersState extends State<CustomerOrders> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
-
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
-        // print(data);
       }
     } catch (e) {
       // print(e.toString());
@@ -123,10 +229,503 @@ class _CustomerOrdersState extends State<CustomerOrders> {
         ),
       );
 
-      ScaffoldMessenger.of(context)
+      ScaffoldMessenger.of(ctxt)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
     }
+  }
+
+  void payDirect(ctxt, listing_id, price, task, bookingID, booking) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    EasyLoading.show();
+    print("this is $price");
+    print('make payment sup');
+    try {
+      Response response = await post(
+          Uri.parse("https://admin.rise.ng/api/payment/initialize/purchase"),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          },
+          body: {
+            'listing_ids': listing_id.toString(),
+            'task_id': task,
+            'amount': price.toString(),
+            'booking_id': bookingID.toString(),
+          });
+      var data = jsonDecode(response.body.toString());
+      print(data);
+      if (response.statusCode == 200) {
+        // print(data);
+        // print(data['data']);
+        EasyLoading.dismiss();
+        Navigator.pop(context);
+        showOffer(
+            context,
+            data['message'],
+            data['data']['data']['data']['authorization_url'],
+            booking['title'],
+            booking['description']);
+      } else {
+        // print('error ${response.statusCode.toString()}');
+        EasyLoading.dismiss();
+        Navigator.pop(context);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'error ${response.statusCode.toString()}',
+            message: data['message'].toString(),
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } catch (e) {
+      // print(e.toString());
+      EasyLoading.dismiss();
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: e.toString(),
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(ctxt)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  }
+
+  var now = "0";
+  void showLogistics(ctx, bookings) {
+    if (bookings['bargained_amount'] != null &&
+        bookings['bargained_amount'].length >= 3) {
+      var str = bookings['bargained_amount']
+          .substring(0, bookings['bargained_amount'].length - 3);
+      setState(() {
+        now = str;
+      });
+    }
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            // <-- SEE HERE
+            borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        )),
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.4,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 20.0,
+                    right: 20,
+                    top: 30,
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "Pickup Address",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 3, bottom: 3),
+                        decoration: BoxDecoration(
+                            color: whiteColor.withOpacity(0.29),
+                            borderRadius: BorderRadius.circular(50.0),
+                            border: const Border(
+                              top: BorderSide(width: 2, color: grayColor),
+                              left: BorderSide(width: 2, color: grayColor),
+                              right: BorderSide(width: 2, color: grayColor),
+                              bottom: BorderSide(width: 2, color: grayColor),
+                            )),
+                        child: DropdownButton(
+                          hint: Text(
+                            "--Select Pick Up Address--",
+                            style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: grayColor.withOpacity(0.9)),
+                          ),
+                          dropdownColor: Colors.white,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 22,
+                          isExpanded: true,
+                          underline: const SizedBox(),
+                          style: GoogleFonts.poppins(
+                              color: Colors.black, fontSize: 16.sp),
+                          value: singleSelectedPickUp,
+                          onChanged: (newValue) async {
+                            setState(() {
+                              singleSelectedPickUp = newValue;
+                            });
+                          },
+                          items: selectedPickUp
+                              .map<DropdownMenuItem<String>>((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Dropoff Address",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 3, bottom: 3),
+                        decoration: BoxDecoration(
+                            color: whiteColor.withOpacity(0.29),
+                            borderRadius: BorderRadius.circular(50.0),
+                            border: const Border(
+                              top: BorderSide(width: 2, color: grayColor),
+                              left: BorderSide(width: 2, color: grayColor),
+                              right: BorderSide(width: 2, color: grayColor),
+                              bottom: BorderSide(width: 2, color: grayColor),
+                            )),
+                        child: DropdownButton(
+                          hint: Text(
+                            "--Select Drop Off Address--",
+                            style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: grayColor.withOpacity(0.9)),
+                          ),
+                          dropdownColor: Colors.white,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 22,
+                          isExpanded: true,
+                          underline: const SizedBox(),
+                          style: GoogleFonts.poppins(
+                              color: Colors.black, fontSize: 16.sp),
+                          value: selectedDropOff,
+                          onChanged: (newValue) async {
+                            setState(() {
+                              selectedDropOff = newValue;
+                            });
+                            await selectRoute().then((value) => {
+                                  setState(() {
+                                    routeDetail = routeDetail;
+                                  })
+                                });
+                          },
+                          items: dropOffList
+                              .map<DropdownMenuItem<String>>((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Value Offer",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              "N${bookings['bargained_amount']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Shipping Cost",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              routeDetail == null
+                                  ? "0.00"
+                                  : "${routeDetail['amount']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Route ID",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              routeDetail == null
+                                  ? "0"
+                                  : "${routeDetail['id']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: RiseButtonNew(
+                            text: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: routeDetail == null
+                                        ? "pay N${int.parse(now)} "
+                                        : "pay N${int.parse(now) + routeDetail['amount']} ",
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      // fontFamily: 'Chillax',
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.check,
+                                      size: 22,
+                                      color: greenColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            buttonColor: blackColor,
+                            textColor: whiteColor,
+                            onPressed: () {
+                              payDirectWithRoute(
+                                  context,
+                                  bookings['id'],
+                                  int.parse(now) + routeDetail['amount'],
+                                  routeDetail['id'],
+                                  bookings['task_id'],
+                                  bookings['id'],
+                                  bookings);
+                            }),
+                      ),
+                      const SizedBox(
+                        height: 60,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  void showOffer(ctx, text, link, title, description) {
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            // <-- SEE HERE
+            borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        )),
+        builder: (context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: 20.0,
+                  right: 20,
+                  top: 30,
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Center(
+                      child: AspectRatio(
+                        aspectRatio: 16 / 12,
+                        child: Image.asset(
+                          'assets/images/rise-check.gif',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 21.0),
+                      child: Text(
+                        "Congratulations, you have Initialized payment to $title for $description",
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.sp,
+                        ),
+                        softWrap: false,
+                        maxLines: 6,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    GestureDetector(
+                      onTap: () {
+                        // print(link);
+                        Navigator.pop(context);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return PaymentScreen(
+                            link: link!,
+                          );
+                        }));
+
+                        final snackBar = SnackBar(
+                          /// need to set following properties for best effect of awesome_snackbar_content
+                          elevation: 0,
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.transparent,
+                          content: AwesomeSnackbarContent(
+                            title: 'Payment initialized!',
+                            message: text,
+
+                            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                            contentType: ContentType.success,
+                          ),
+                        );
+
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(snackBar);
+                      },
+                      child: Text(
+                        "click here to complete payment",
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   void updateBookingStatus(context, status, bookingID) async {
@@ -153,7 +752,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated successfully!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -173,7 +772,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -215,16 +814,9 @@ class _CustomerOrdersState extends State<CustomerOrders> {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
           });
-      // print(response.statusCode);
       var data = jsonDecode(response.body.toString());
-      // print('hkhkhkhkhkhkhkhkkhkh');
-      // print(data);
 
       if (response.statusCode == 200) {
-        // userData = data['data']['user'];
-        // names = userData!.fullName!.split(' ');
-        // print("Bookings data fetched_uuuuuuuuuuuuu");
-        // print(data);
         var result = data['data']['newBooking']['data'];
         List tempList = [];
         if (result != null) {
@@ -435,13 +1027,19 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                           buttonColor: secondaryColor.withOpacity(0.3),
                           textColor: whiteColor,
                           onPressed: () {
-                            payDirect(
-                                context,
-                                booking['listing_id'],
-                                booking['bargained_amount'],
-                                booking['task_id'],
-                                booking['id']);
-                            // showOffer(context);
+                            if (booking['category'] == "Vendor") {
+                              getPickUp(booking['id']);
+                              showLogistics(context, booking);
+                            } else {
+                              payDirect(
+                                  context,
+                                  booking['listing_id'],
+                                  booking['bargained_amount'],
+                                  booking['task_id'],
+                                  booking['id'],
+                                  booking);
+                              // showOffer(context);
+                            }
                           }),
                     ),
                   ],

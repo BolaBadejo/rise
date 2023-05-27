@@ -4,8 +4,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -13,13 +11,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:rise/constants.dart';
 import 'package:rise/data/model/listings/listings_model.dart';
-import 'package:rise/services/api_handler.dart';
-import 'package:rise/widgets/custom_snack_bar.dart';
 import 'package:rise/widgets/rise_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../utils/shared_preferences.dart';
 import '../../payment/payment_screen.dart';
 
 class ViewProductDetailScreen extends StatefulWidget {
@@ -51,8 +45,13 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
   @override
   void initState() {
     fetchUserListings();
+    getPickUp();
+    getDropOff();
     super.initState();
   }
+
+  var price = "N0.00";
+  var routeID = '--Route ID--';
 
   Future<void> fetchUserListings() async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
@@ -87,18 +86,13 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
           fetchedSubListing = tempList;
           fetchedListings = DataModel.dataFromSnapshot(tempList);
         });
-        // print(data);
-        // print("Listings fetched");
       } else {
-        // // print(data['message']);
         setState(() {
           state = '${data['message']}';
           stateHeader = 'You have no listings here';
         });
       }
     } catch (e) {
-      // print(e.toString());
-      // print("exception, coundnt retrieve listing");
       setState(() {
         state = "Check connection";
         stateHeader =
@@ -111,9 +105,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
     int value = int.parse(amount);
-    EasyLoading.show;
     EasyLoading.show();
-    // print('this is price now: $value');
     try {
       Response response = await post(
           Uri.parse("https://admin.rise.ng/api/booking/new"),
@@ -128,28 +120,17 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
             'amount': value.toString()
           });
       var data = jsonDecode(response.body.toString());
-      // print(data);
 
       if (response.statusCode == 200) {
-        // print(data);
-        // showCustomSnackBar(
-        //     context, data['message'], Colors.green, Colors.white);
-
         Navigator.pop(context);
-
-        // print(data['data']['user']);
-        // print("done successfully");
         EasyLoading.dismiss();
         final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Booking Created',
-            message: data['message'],
-
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -159,21 +140,15 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
           ..showSnackBar(snackBar);
         EasyLoading.dismiss();
       } else {
-        // print('error ${response.statusCode.toString()}');
         EasyLoading.dismiss();
-        // showCustomSnackBar(context, 'error ${response.statusCode.toString()}',
-        //     Colors.red, Colors.white);
         Navigator.pop(context);
         final snackBar = SnackBar(
-          /// need to set following properties for best effect of awesome_snackbar_content
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
-
-            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -183,19 +158,14 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
           ..showSnackBar(snackBar);
       }
     } catch (e) {
-      // print(e.toString());
       EasyLoading.dismiss();
-      // showCustomSnackBar(context, e.toString(), Colors.red, Colors.white);
       final snackBar = SnackBar(
-        /// need to set following properties for best effect of awesome_snackbar_content
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         content: AwesomeSnackbarContent(
           title: 'Error',
           message: e.toString(),
-
-          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
           contentType: ContentType.failure,
         ),
       );
@@ -206,9 +176,114 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
     }
   }
 
+  var dropOffList = [];
+
+  var selectedDropOff;
+
+  var singleSelectedPickUp;
+
+  var routeDetail;
+
+  Future<void> selectRoute() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    print('fetching route');
+
+    try {
+      Response response = await post(
+          Uri.parse("https://admin.rise.ng/api/pick_up/select-route"),
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $getToken'
+          },
+          body: {
+            'pick_up': selectedPickUp[0],
+            'drop_off': selectedDropOff,
+          });
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(response);
+        setState(() {
+          routeDetail = data['data']['routesFee'];
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  Future<void> getDropOff() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    print('fetching locations');
+
+    try {
+      final response = await get(
+          Uri.parse('https://admin.rise.ng/api/pick_up/drop-off-routes'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
+      print(getToken);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(response);
+        setState(() {
+          dropOffList = data['data']['availableDropOffRoutes'];
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  var selectedPickUp = [];
+
+  Future<void> getPickUp() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    print('fetching locations');
+
+    try {
+      final response = await get(
+          Uri.parse(
+              'https://admin.rise.ng/api/pick_up/find-listings-pick-up-route/${widget.dataModel.id.toString()}'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
+      print(getToken);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // userData = data['data']['user'];
+        // names = userData!.fullName!.split(' ');
+        print(response);
+        // print("States fetched");
+        setState(() {
+          selectedPickUp = data['data']['vendorAvailablePickUps'];
+          // print(lgaList);
+        });
+      } else {}
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
   void payDirect(ctxt, listing_id, price) async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     String getToken = sharedPreference.get('access_token').toString();
+    EasyLoading.show();
+    print("this is $price");
+    print('make payment sup');
     try {
       Response response = await post(
           Uri.parse(
@@ -219,35 +294,29 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
           },
           body: {
             'listing_ids': listing_id.toString(),
-            // 'booking_id': booking_id,
             'amount': price.toString(),
           });
       var data = jsonDecode(response.body.toString());
-      // print(data);
+      print(data);
       if (response.statusCode == 200) {
-        // print(data);
-        // print(data['data']);
-        Navigator.pop(context);
-        showOffer(context, data['message'],
-            data['data']['data']['data']['authorization_url']);
-
-        // print("done successfully");
-      } else {
-        // print('error ${response.statusCode.toString()}');
         EasyLoading.dismiss();
-        Navigator.pop(context);
+        Navigator.pop(ctxt);
+        showOffer(ctxt, data['message'],
+            data['data']['data']['data']['authorization_url']);
+      } else {
+        EasyLoading.dismiss();
+        Navigator.pop(ctxt);
         final snackBar = SnackBar(
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
-
-        ScaffoldMessenger.of(context)
+        ScaffoldMessenger.of(ctxt)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
       }
@@ -269,6 +338,390 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
     }
+  }
+
+  void payWithRoute(ctxt, listing_id, price, route) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    EasyLoading.show();
+    print("this is $price");
+    print('make payment sup');
+    try {
+      Response response = await post(
+          Uri.parse(
+              "https://admin.rise.ng/api/payment/initialize/direct-purchase"),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          },
+          body: {
+            'listing_ids': listing_id.toString(),
+            'amount': price.toString(),
+          });
+      var data = jsonDecode(response.body.toString());
+      print(data);
+      if (response.statusCode == 200) {
+        EasyLoading.dismiss();
+        Navigator.pop(ctxt);
+        showOffer(ctxt, data['message'],
+            data['data']['data']['data']['authorization_url']);
+      } else {
+        EasyLoading.dismiss();
+        Navigator.pop(ctxt);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'error ${response.statusCode.toString()}',
+            message: data['message'].toString(),
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(ctxt)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } catch (e) {
+      // print(e.toString());
+      EasyLoading.dismiss();
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: e.toString(),
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(ctxt)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  }
+
+  var now = "0";
+  void showLogistics(BuildContext ctx) {
+    if (widget.dataModel.minimumOffer! != null &&
+        widget.dataModel.minimumOffer!.length >= 3) {
+      var str = widget.dataModel.minimumOffer!
+          .substring(0, widget.dataModel.minimumOffer!.length - 3);
+      setState(() {
+        now = str;
+      });
+    }
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            // <-- SEE HERE
+            borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        )),
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.4,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 20.0,
+                    right: 20,
+                    top: 30,
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "Pickup Address",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 3, bottom: 3),
+                        decoration: BoxDecoration(
+                            color: whiteColor.withOpacity(0.29),
+                            borderRadius: BorderRadius.circular(50.0),
+                            border: const Border(
+                              top: BorderSide(width: 2, color: grayColor),
+                              left: BorderSide(width: 2, color: grayColor),
+                              right: BorderSide(width: 2, color: grayColor),
+                              bottom: BorderSide(width: 2, color: grayColor),
+                            )),
+                        child: DropdownButton(
+                          hint: Text(
+                            "--Select Pick Up Address--",
+                            style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: grayColor.withOpacity(0.9)),
+                          ),
+                          dropdownColor: Colors.white,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 22,
+                          isExpanded: true,
+                          underline: const SizedBox(),
+                          style: GoogleFonts.poppins(
+                              color: Colors.black, fontSize: 16.sp),
+                          value: singleSelectedPickUp,
+                          onChanged: (newValue) async {
+                            setState(() {
+                              singleSelectedPickUp = newValue;
+                            });
+                          },
+                          items: selectedPickUp
+                              .map<DropdownMenuItem<String>>((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Dropoff Address",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 3, bottom: 3),
+                        decoration: BoxDecoration(
+                            color: whiteColor.withOpacity(0.29),
+                            borderRadius: BorderRadius.circular(50.0),
+                            border: const Border(
+                              top: BorderSide(width: 2, color: grayColor),
+                              left: BorderSide(width: 2, color: grayColor),
+                              right: BorderSide(width: 2, color: grayColor),
+                              bottom: BorderSide(width: 2, color: grayColor),
+                            )),
+                        child: DropdownButton(
+                          hint: Text(
+                            "--Select Drop Off Address--",
+                            style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: grayColor.withOpacity(0.9)),
+                          ),
+                          dropdownColor: Colors.white,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 22,
+                          isExpanded: true,
+                          underline: const SizedBox(),
+                          style: GoogleFonts.poppins(
+                              color: Colors.black, fontSize: 16.sp),
+                          value: selectedDropOff,
+                          onChanged: (newValue) async {
+                            setState(() {
+                              selectedDropOff = newValue;
+                            });
+                            await selectRoute().then((value) => {
+                                  setState(() {
+                                    routeDetail = routeDetail;
+                                  })
+                                });
+                          },
+                          items: dropOffList
+                              .map<DropdownMenuItem<String>>((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Value Offer",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              "N${widget.dataModel.minimumOffer!}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Shipping Cost",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              routeDetail == null
+                                  ? "0.00"
+                                  : "${routeDetail['amount']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Route ID",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          // fontFamily: 'Chillax',
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.h),
+                          color: grayColor.withOpacity(0.2),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              routeDetail == null
+                                  ? "0"
+                                  : "${routeDetail['id']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                // fontFamily: 'Chillax',
+                                color: blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: RiseButtonNew(
+                            text: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: routeDetail == null
+                                        ? "pay N${int.parse(now)} "
+                                        : "pay N${int.parse(now) + routeDetail['amount']} ",
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      // fontFamily: 'Chillax',
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.check,
+                                      size: 22,
+                                      color: greenColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            buttonColor: blackColor,
+                            textColor: whiteColor,
+                            onPressed: () {
+                              payWithRoute(
+                                  context,
+                                  widget.dataModel.id.toString(),
+                                  int.parse(now) + routeDetail['amount'],
+                                  routeDetail['id']);
+                            }),
+                      ),
+                      const SizedBox(
+                        height: 60,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+        });
   }
 
   void showNegotiation(BuildContext ctx) {
@@ -561,7 +1014,8 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.dataModel['minimum_offer']);
+    print(widget.dataModel.toString());
+    print('this is listing id ${widget.dataModel['id']}');
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -693,9 +1147,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                                 TextSpan(
                                   text:
                                       " ${widget.dataModel['service_offering']}",
-                                  // overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.poppins(
-                                    // fontFamily: 'Chillax',
                                     color: blackColor,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 10.sp,
@@ -712,10 +1164,8 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                                       size: 18, color: primaryColor),
                                 ),
                                 TextSpan(
-                                  text: widget.dataModel['service_offering'],
-                                  // overflow: TextOverflow.ellipsis,
+                                  text: widget.dataModel['category'],
                                   style: GoogleFonts.poppins(
-                                    // fontFamily: 'Chillax',
                                     color: blackColor,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 10.sp,
@@ -827,11 +1277,19 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                           ),
                           buttonColor: blackColor,
                           textColor: whiteColor,
-                          onPressed: () {
-                            payDirect(
+                          onPressed: () async {
+                            // print(
+                            //     'this is listing id ${widget.dataModel['id']}');
+                            if (widget.dataModel['service_offering'] ==
+                                "Vendor") {
+                              showLogistics(context);
+                            } else {
+                              payDirect(
                                 context,
                                 widget.dataModel['id'].toString(),
-                                widget.dataModel['minimum_offer'].toString());
+                                widget.dataModel['minimum_offer'],
+                              );
+                            }
                           }),
                     ),
                     const SizedBox(height: 15),
@@ -850,7 +1308,9 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                           ),
                           buttonColor: secondaryColor.withOpacity(0.3),
                           textColor: blackColor,
-                          onPressed: () => showNegotiation(context)),
+                          onPressed: () {
+                            showNegotiation(context);
+                          }),
                     ),
                     const SizedBox(
                       height: 30,
@@ -927,7 +1387,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                                                 aspectRatio: 16 / 12,
                                                 child: ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.only(
+                                                      const BorderRadius.only(
                                                           topLeft:
                                                               Radius.circular(
                                                                   15),
@@ -941,13 +1401,13 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                                                             .listingImages[0],
                                                     placeholder: (context,
                                                             url) =>
-                                                        Center(
+                                                        const Center(
                                                             child:
-                                                                const CircularProgressIndicator()),
+                                                                CircularProgressIndicator()),
                                                     errorWidget: (context, url,
                                                             error) =>
-                                                        Center(
-                                                            child: const Icon(
+                                                        const Center(
+                                                            child: Icon(
                                                                 Icons.error)),
                                                   ),
                                                 ),
@@ -1027,7 +1487,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                             primary: false,
                             padding: const EdgeInsets.all(20),
                           ),
-                    SizedBox(
+                    const SizedBox(
                       height: 60,
                     )
                   ],

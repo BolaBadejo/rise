@@ -95,7 +95,7 @@ class InsurePageState extends State<InsurePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Insurance initialized!!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -116,7 +116,7 @@ class InsurePageState extends State<InsurePage> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

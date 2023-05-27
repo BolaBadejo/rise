@@ -84,7 +84,7 @@ class SignInFormState extends State<SignInForm> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -104,7 +104,7 @@ class SignInFormState extends State<SignInForm> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -160,7 +160,7 @@ class SignInFormState extends State<SignInForm> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Updated',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -180,7 +180,7 @@ class SignInFormState extends State<SignInForm> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -273,7 +273,7 @@ class SignInFormState extends State<SignInForm> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'there you go',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,

@@ -10,7 +10,6 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart';
-// import 'package:form_field_validator/form_field_validator.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:rise/constants.dart';
 
@@ -176,7 +175,7 @@ class NewListingState extends State<NewListing> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Listing created',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,
@@ -206,7 +205,7 @@ class NewListingState extends State<NewListing> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${responseBody.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.failure,
@@ -486,6 +485,19 @@ class NewListingState extends State<NewListing> {
                                 ),
                               ),
                               const SizedBox(
+                                height: 5,
+                              ),
+
+                              Text(
+                                "use as many as four(4) tags and separate them with commas\n example. sell, products, on, rise",
+                                style: TextStyle(
+                                  // fontFamily: 'Chillax',
+                                  color: grayColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8.sp,
+                                ),
+                              ),
+                              const SizedBox(
                                 height: 10,
                               ),
                               TextFormField(
@@ -493,8 +505,7 @@ class NewListingState extends State<NewListing> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.tag),
-                                  hintText:
-                                      "write up to four tags and separate them with comma",
+                                  hintText: "xxxx, xxxx, xxxx, xxxx",
                                   hintStyle: GoogleFonts.poppins(
                                     color: const Color(0xffb5b5b5)
                                         .withOpacity(0.5),
@@ -591,68 +602,68 @@ class NewListingState extends State<NewListing> {
 
                               const SizedBox(height: 20.0),
 
-                              Text(
-                                "Sub Category",
-                                style: GoogleFonts.poppins(
-                                  // fontFamily: 'Chillax',
-                                  color: blackColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 16, top: 3, bottom: 3),
-                                decoration: BoxDecoration(
-                                    color: whiteColor.withOpacity(0.29),
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    border: const Border(
-                                      top: BorderSide(
-                                          width: 2, color: grayColor),
-                                      left: BorderSide(
-                                          width: 2, color: grayColor),
-                                      right: BorderSide(
-                                          width: 2, color: grayColor),
-                                      bottom: BorderSide(
-                                          width: 2, color: grayColor),
-                                    )),
-                                child: DropdownButton(
-                                  hint: Text(
-                                    "Select Listing Sub-Category",
-                                    style: GoogleFonts.poppins(
-                                      // fontFamily: 'Outfit',
-                                      fontSize: 12,
-                                      color: grayColor.withOpacity(0.9),
-                                    ),
-                                  ),
-                                  dropdownColor: Colors.white,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 22,
-                                  isExpanded: true,
-                                  underline: const SizedBox(),
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.black, fontSize: 16),
-                                  value: selectedListing,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedListing = newValue;
-                                    });
-                                  },
-                                  items: listingCategoryList
-                                      .map<DropdownMenuItem<String>>(
-                                          (valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                              // Text(
+                              //   "Sub Category",
+                              //   style: GoogleFonts.poppins(
+                              //     // fontFamily: 'Chillax',
+                              //     color: blackColor,
+                              //     fontWeight: FontWeight.w600,
+                              //     fontSize: 12.sp,
+                              //   ),
+                              // ),
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
+                              // Container(
+                              //   padding: const EdgeInsets.only(
+                              //       left: 16, right: 16, top: 3, bottom: 3),
+                              //   decoration: BoxDecoration(
+                              //       color: whiteColor.withOpacity(0.29),
+                              //       borderRadius: BorderRadius.circular(50.0),
+                              //       border: const Border(
+                              //         top: BorderSide(
+                              //             width: 2, color: grayColor),
+                              //         left: BorderSide(
+                              //             width: 2, color: grayColor),
+                              //         right: BorderSide(
+                              //             width: 2, color: grayColor),
+                              //         bottom: BorderSide(
+                              //             width: 2, color: grayColor),
+                              //       )),
+                              //   child: DropdownButton(
+                              //     hint: Text(
+                              //       "Select Listing Sub-Category",
+                              //       style: GoogleFonts.poppins(
+                              //         // fontFamily: 'Outfit',
+                              //         fontSize: 12,
+                              //         color: grayColor.withOpacity(0.9),
+                              //       ),
+                              //     ),
+                              //     dropdownColor: Colors.white,
+                              //     icon: const Icon(Icons.arrow_drop_down),
+                              //     iconSize: 22,
+                              //     isExpanded: true,
+                              //     underline: const SizedBox(),
+                              //     style: GoogleFonts.poppins(
+                              //         color: Colors.black, fontSize: 16),
+                              //     value: selectedListing,
+                              //     onChanged: (newValue) {
+                              //       setState(() {
+                              //         selectedListing = newValue;
+                              //       });
+                              //     },
+                              //     items: listingCategoryList
+                              //         .map<DropdownMenuItem<String>>(
+                              //             (valueItem) {
+                              //       return DropdownMenuItem(
+                              //         value: valueItem,
+                              //         child: Text(valueItem),
+                              //       );
+                              //     }).toList(),
+                              //   ),
+                              // ),
 
-                              const SizedBox(height: 20.0),
+                              // const SizedBox(height: 20.0),
                               Row(
                                 children: [
                                   Text(
@@ -682,7 +693,7 @@ class NewListingState extends State<NewListing> {
                                   // fontFamily: 'Chillax',
                                   color: grayColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 7.sp,
+                                  fontSize: 8.sp,
                                 ),
                               ),
                               const SizedBox(
@@ -717,9 +728,17 @@ class NewListingState extends State<NewListing> {
                               const SizedBox(height: 16.0 * 2.0),
                               SizedBox(
                                 width: double.infinity,
-                                child: RiseButton(
-                                  text: "Add Item",
-                                  buttonColor: secondaryColor,
+                                child: RiseButtonNew(
+                                  text: Text(
+                                    "Add Item",
+                                    style: TextStyle(
+                                      // fontFamily: 'Chillax',
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                  buttonColor: blackColor,
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();

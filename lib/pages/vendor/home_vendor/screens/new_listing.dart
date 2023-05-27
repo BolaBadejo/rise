@@ -103,7 +103,7 @@ class NewListingState extends State<NewListing> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Done',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,

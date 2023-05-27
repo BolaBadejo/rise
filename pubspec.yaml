@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.1.4
+version: 1.0.1+4
 
 environment:
   sdk: '>=2.18.3 <3.0.0'
@@ -81,12 +81,13 @@ dependencies:
   webview_flutter: ^3.0.2
   flutter_share: ^2.0.0
   flutter_carousel_widget: ^2.0.2
+  qr_flutter: ^4.0.0
 
 dependency_overrides:
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/danReynolds/modal_bottom_sheet.git
-      path: modal_bottom_sheet
+  # modal_bottom_sheet:
+  #   git:
+  #     url: https://github.com/danReynolds/modal_bottom_sheet.git
+  #     path: modal_bottom_sheet
   # flutter_identity_kyc: ^0.1.4
 #  modal_bottom_sheet:
 #    git:

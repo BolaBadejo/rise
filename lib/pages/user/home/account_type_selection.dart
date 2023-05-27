@@ -92,7 +92,7 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Registration Successful',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -118,7 +118,7 @@ class AccountTypeSelectionState extends State<AccountTypeSelection> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Error',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

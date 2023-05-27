@@ -149,7 +149,7 @@ class _BankInfoState extends State<BankInfo> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Nice!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -186,7 +186,7 @@ class _BankInfoState extends State<BankInfo> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

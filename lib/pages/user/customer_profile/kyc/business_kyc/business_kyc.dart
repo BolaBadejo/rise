@@ -103,7 +103,7 @@ class BusinessKYCState extends State<BusinessKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verified',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -123,7 +123,7 @@ class BusinessKYCState extends State<BusinessKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -174,7 +174,7 @@ class BusinessKYCState extends State<BusinessKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verified',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -196,7 +196,7 @@ class BusinessKYCState extends State<BusinessKYC> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${responseBody.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );

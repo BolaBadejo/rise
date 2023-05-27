@@ -192,7 +192,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Nice!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -229,7 +229,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -640,7 +640,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                         context,
                                         widget.data['bvn_number'].toString(),
                                         widget.data['personal_info']
-                                                ['fitst_name']
+                                                ['first_name']
                                             .toString(),
                                         widget.data['personal_info']
                                                 ['last_name']

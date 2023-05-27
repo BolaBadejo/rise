@@ -71,7 +71,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verification sent!!',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.success,
           ),
         );
@@ -89,7 +89,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
             contentType: ContentType.failure,
           ),
         );
@@ -147,7 +147,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'Verified',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.success,
@@ -176,7 +176,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: 'error ${response.statusCode.toString()}',
-            message: data['message'],
+            message: data['message'].toString(),
 
             /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
             contentType: ContentType.failure,
