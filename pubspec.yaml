@@ -99,7 +99,7 @@ dev_dependencies:
   build_runner:
   flutter_test:
     sdk: flutter
-  flutter_icons:
+  # flutter_icons:
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
