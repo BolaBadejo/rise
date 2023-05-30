@@ -26,7 +26,7 @@ class _ArtisanTaskState extends State<ArtisanTask> {
   @override
   initState() {
     fetchUserBookings();
-
+    fetchUserTasks();
     super.initState();
   }
 
@@ -110,6 +110,52 @@ class _ArtisanTaskState extends State<ArtisanTask> {
 
     try {
       final response = await get(
+          Uri.parse('https://admin.rise.ng/api/booking/current'),
+          headers: {
+            "Accept": "application/json",
+            'Authorization': 'Bearer $getToken'
+          });
+      var data = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        var result = data['data']['newBooking']['data'];
+        List tempList = [];
+        if (result != null) {
+          for (var v in result) {
+            tempList.add(v);
+          }
+        }
+
+        var running = data['data']['ongoingBooking']['data'];
+        List ongoingList = [];
+        if (running != null) {
+          for (var v in running) {
+            ongoingList.add(v);
+          }
+        }
+
+        print(ongoingList);
+        print(tempList);
+
+        setState(() {
+          fetchedBookings = tempList;
+          ongoingBookings = ongoingList;
+        });
+      } else {
+        // print((data['message']));
+      }
+    } catch (e) {
+      // print(e.toString());
+    }
+  }
+
+  Future<void> fetchUserTasks() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    String getToken = sharedPreference.get('access_token').toString();
+    // print('fetching user bookings');
+
+    try {
+      final response = await get(
           Uri.parse('https://admin.rise.ng/api/booking/vendor/current'),
           headers: {
             "Accept": "application/json",
@@ -142,8 +188,8 @@ class _ArtisanTaskState extends State<ArtisanTask> {
         }
 
         setState(() {
-          fetchedBookings = tempList;
-          ongoingBookings = ongoingList;
+          fetchedTasks = tempList;
+          ongoingTasks = ongoingList;
         });
       } else {
         // print((data['message']));
@@ -155,6 +201,9 @@ class _ArtisanTaskState extends State<ArtisanTask> {
 
   var fetchedBookings = [];
   var ongoingBookings = [];
+
+  var fetchedTasks = [];
+  var ongoingTasks = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
@@ -209,6 +258,458 @@ class _ArtisanTaskState extends State<ArtisanTask> {
               SizedBox(
                 height: 20,
               ),
+              fetchedTasks == null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10),
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        height: 13.h,
+                        width: 100.w,
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "We are fetching your tasks",
+                              style: TextStyle(
+                                // fontFamily: 'Chillax',
+                                color: whiteColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Please wait... ",
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      // fontFamily: 'Chillax',
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
+              ExpansionTile(
+                  title: Text('Pending Tasks (${fetchedTasks.length})'),
+                  children: [
+                    fetchedBookings.length == 0
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10),
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              height: 10.h,
+                              width: 100.w,
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "You have no tasks here",
+                                  style: TextStyle(
+                                    // fontFamily: 'Chillax',
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemExtent: 26.h,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(8),
+                            itemCount: fetchedBookings.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var task = fetchedTasks[index];
+                              return Container(
+                                height: 25.h,
+                                width: 100.w,
+                                margin: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: grayColor.withOpacity(0.3),
+                                      offset: const Offset(
+                                        3.0,
+                                        3.0,
+                                      ),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 2.0,
+                                    ), //BoxShadow
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        ProfilePicture(
+                                          name: task['user']['full_name'] ?? '',
+                                          radius: 20,
+                                          fontsize: 18,
+                                          random: true,
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              task['title'] ?? '',
+                                              // overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                // fontFamily: 'Chillax',
+                                                color: blackColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "customer: ",
+                                                    // overflow: TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      // fontFamily: 'Chillax',
+                                                      color: blackColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 9.sp,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: task['user']
+                                                            ['full_name'] ??
+                                                        '',
+                                                    // overflow: TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      // fontFamily: 'Chillax',
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 9.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      task['tentative_amount'] ?? '',
+                                      // overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        // fontFamily: 'Chillax',
+                                        color: blackColor,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 3),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: primaryColor),
+                                          child: Text(
+                                            task['status'] ?? '',
+                                            style: TextStyle(
+                                              // fontFamily: 'Chillax',
+                                              fontWeight: FontWeight.w500,
+                                              color: whiteColor,
+                                              fontSize: 9.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuButton<String>(
+                                          icon: Icon(Icons.more_vert),
+                                          itemBuilder: (BuildContext context) =>
+                                              [
+                                            PopupMenuItem<String>(
+                                              value: 'Rejected',
+                                              child: Text('Reject'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Arrived',
+                                              child: Text('Arrived'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Started',
+                                              child: Text('Started'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Completed',
+                                              child: Text('Completed'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Cancelled',
+                                              child: Text('Cancelled'),
+                                            ),
+                                          ],
+                                          onSelected: (String value) {
+                                            // Do something with the selected value
+                                            updateBookingStatus(
+                                                context, value, task['id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                  ]),
+              ExpansionTile(
+                  title: Text('Ongoing Tasks (${ongoingTasks.length})'),
+                  children: [
+                    ongoingTasks.length == 0
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10),
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              height: 10.h,
+                              width: 100.w,
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "You have no task here",
+                                  style: TextStyle(
+                                    // fontFamily: 'Chillax',
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemExtent: 26.h,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(8),
+                            itemCount: ongoingBookings.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var task = ongoingTasks[index];
+                              return Container(
+                                height: 25.h,
+                                width: 100.w,
+                                margin: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: grayColor.withOpacity(0.3),
+                                      offset: const Offset(
+                                        3.0,
+                                        3.0,
+                                      ),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 2.0,
+                                    ), //BoxShadow
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        ProfilePicture(
+                                          name: task['user']['full_name'] ?? '',
+                                          radius: 20,
+                                          fontsize: 18,
+                                          random: true,
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              task['title'] ?? '',
+                                              // overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                // fontFamily: 'Chillax',
+                                                color: blackColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "customer: ",
+                                                    // overflow: TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      // fontFamily: 'Chillax',
+                                                      color: blackColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 9.sp,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: task['user']
+                                                            ['full_name'] ??
+                                                        '',
+                                                    // overflow: TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      // fontFamily: 'Chillax',
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 9.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      task['tentative_amount'] ?? '',
+                                      // overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        // fontFamily: 'Chillax',
+                                        color: blackColor,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 3),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: primaryColor),
+                                          child: Text(
+                                            task['status'] ?? '',
+                                            style: TextStyle(
+                                              // fontFamily: 'Chillax',
+                                              fontWeight: FontWeight.w500,
+                                              color: whiteColor,
+                                              fontSize: 9.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuButton<String>(
+                                          icon: Icon(Icons.more_vert),
+                                          itemBuilder: (BuildContext context) =>
+                                              [
+                                            PopupMenuItem<String>(
+                                              value: 'Rejected',
+                                              child: Text('Reject'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Arrived',
+                                              child: Text('Arrived'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Started',
+                                              child: Text('Started'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Completed',
+                                              child: Text('Completed'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'Cancelled',
+                                              child: Text('Cancelled'),
+                                            ),
+                                          ],
+                                          onSelected: (String value) {
+                                            // Do something with the selected value
+                                            updateBookingStatus(
+                                                context, value, task['id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                  ]),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Bookings",
+                      style: TextStyle(
+                        // fontFamily: 'Chillax',
+                        color: blackColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               fetchedBookings == null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
@@ -256,7 +757,7 @@ class _ArtisanTaskState extends State<ArtisanTask> {
                     )
                   : Container(),
               ExpansionTile(
-                  title: Text('Pending bookings (${fetchedBookings.length})'),
+                  title: Text('Pending Bookings (${fetchedBookings.length})'),
                   children: [
                     fetchedBookings.length == 0
                         ? Padding(
@@ -450,7 +951,7 @@ class _ArtisanTaskState extends State<ArtisanTask> {
                             }),
                   ]),
               ExpansionTile(
-                  title: Text('Ongoing bookings (${ongoingBookings.length})'),
+                  title: Text('Ongoing Bookings (${ongoingBookings.length})'),
                   children: [
                     ongoingBookings.length == 0
                         ? Padding(

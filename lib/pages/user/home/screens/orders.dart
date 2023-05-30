@@ -854,6 +854,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
   }
 
   void show(ctx, booking) {
+    print(booking);
     showModalBottomSheet(
         context: ctx,
         shape: const RoundedRectangleBorder(
@@ -1027,7 +1028,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                           buttonColor: secondaryColor.withOpacity(0.3),
                           textColor: whiteColor,
                           onPressed: () {
-                            if (booking['category'] == "Vendor") {
+                            if (booking['user']['user_type'] == "Vendor") {
                               getPickUp(booking['id']);
                               showLogistics(context, booking);
                             } else {

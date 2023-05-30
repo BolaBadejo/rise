@@ -223,20 +223,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       var data = jsonDecode(response.body.toString());
 
       if (response.statusCode == 200) {
-        // userData = data['data']['user'];
-        // names = userData!.fullName!.split(' ');
-        // print(data);
-        // print("user data fetched");
         setState(() {
-          // // print(data.message);
-          // print(data['data']['full_name']);
           names = data['data']['full_name'].split(' ');
           userData = GetAuthUserResponse.fromJson(data);
         });
       } else if (response.statusCode == 401) {
-        // userData = data['data']['user'];
-        // names = userData!.fullName!.split(' ');
-        // print(data);
         final snackBar = SnackBar(
           elevation: 0,
           behavior: SnackBarBehavior.floating,

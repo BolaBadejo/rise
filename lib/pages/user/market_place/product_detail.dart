@@ -1320,7 +1320,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           buttonColor: blackColor,
                           textColor: whiteColor,
                           onPressed: () {
-                            if (widget.dataModel.category! == "Vendor") {
+                            if (widget.dataModel.user['user_type']! ==
+                                "Vendor") {
                               showLogistics(context);
                             } else {
                               print(
@@ -1388,7 +1389,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 MaterialPageRoute(builder: (context) {
                               return ViewProductDetailScreen(
                                 dataModel: fetchedSubListing[index],
-                                // imageUrl: fetchedListings[index].listingImages!,
+                                userType: widget.dataModel.user['user_type'],
                                 index: index,
                               );
                             }));

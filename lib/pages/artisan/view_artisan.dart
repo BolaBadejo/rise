@@ -407,6 +407,7 @@ class _ViewArtisanDetailScreenState extends State<ViewArtisanDetailScreen> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     var listing = fetchedListings[index];
+                                    print(listing);
                                     return GestureDetector(
                                       onTap: () {
                                         DataModel list = fetchedListing[index];
@@ -414,9 +415,9 @@ class _ViewArtisanDetailScreenState extends State<ViewArtisanDetailScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) {
                                           return ViewProductDetailScreen(
-                                            dataModel: fetchedListings[index],
-                                            // imageUrl: fetchedListing[index]
-                                            //     .listingImages!,
+                                            dataModel: listing,
+                                            userType:
+                                                widget.dataModel['user_type'],
                                             index: index,
                                           );
                                         }));

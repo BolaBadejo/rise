@@ -17,6 +17,7 @@ import 'package:sizer/sizer.dart';
 import '../../payment/payment_screen.dart';
 
 class ViewProductDetailScreen extends StatefulWidget {
+  final userType;
   final dataModel;
   final int index;
   // final List<String> imageUrl;
@@ -24,6 +25,7 @@ class ViewProductDetailScreen extends StatefulWidget {
     super.key,
     required this.dataModel,
     required this.index,
+    required this.userType,
   });
 
   @override
@@ -404,10 +406,10 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
 
   var now = "0";
   void showLogistics(BuildContext ctx) {
-    if (widget.dataModel.minimumOffer! != null &&
-        widget.dataModel.minimumOffer!.length >= 3) {
-      var str = widget.dataModel.minimumOffer!
-          .substring(0, widget.dataModel.minimumOffer!.length - 3);
+    if (widget.dataModel['minimum_offer'] != null &&
+        widget.dataModel['minimum_offer'].length >= 3) {
+      var str = widget.dataModel['minimum_offer']
+          .substring(0, widget.dataModel['minimum_offer'].length - 3);
       setState(() {
         now = str;
       });
@@ -579,7 +581,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: Text(
-                              "N${widget.dataModel.minimumOffer!}",
+                              "N${widget.dataModel['minimum_offer']!}",
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 // fontFamily: 'Chillax',
@@ -1280,8 +1282,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                           onPressed: () async {
                             // print(
                             //     'this is listing id ${widget.dataModel['id']}');
-                            if (widget.dataModel['service_offering'] ==
-                                "Vendor") {
+                            if (widget.userType == "Vendor") {
                               showLogistics(context);
                             } else {
                               payDirect(
@@ -1351,7 +1352,7 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                                       MaterialPageRoute(builder: (context) {
                                     return ViewProductDetailScreen(
                                       dataModel: fetchedSubListing[index],
-                                      // imageUrl: fetchedListings[index].listingImages!,
+                                      userType: widget.userType,
                                       index: index,
                                     );
                                   }));

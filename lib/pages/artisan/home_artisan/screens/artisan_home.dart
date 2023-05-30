@@ -17,6 +17,7 @@ import 'package:rise/constants.dart';
 import 'package:rise/data/model/booking/booking_reponse_model.dart';
 import 'package:rise/pages/artisan/home_artisan/screens/new_listing.dart';
 import 'package:rise/pages/artisan/view_artisan.dart';
+import 'package:rise/pages/auth/signin_screen.dart';
 import 'package:rise/pages/user/customer_profile/kyc/user-kyc.dart';
 import 'package:rise/services/api_handler.dart';
 
@@ -158,20 +159,36 @@ class _ArtisanHomeScreenState extends State<ArtisanHomeScreen> {
             "Accept": "application/json",
             'Authorization': 'Bearer $getToken'
           });
-
+      var data = jsonDecode(response.body.toString());
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        // userData = data['data']['user'];
-        // names = userData!.fullName!.split(' ');
-        // print(data);
-        // print("user data fetched");
         setState(() {
-          // // print(data.message);
-          // print(data['data']['full_name']);
           names = data['data']['full_name'].split(' ');
           userData = GetAuthUserResponse.fromJson(data);
         });
-      } else {}
+      } else if (response.statusCode == 401) {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Session expired',
+            message: data['error'],
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        SharedPreferences sharedPreference =
+            await SharedPreferences.getInstance();
+        sharedPreference.clear();
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return SignInScreen();
+        }));
+      } else {
+        // print(response.statusCode);
+        // print('this is  data $data');
+      }
     } catch (e) {
       // print(e.toString());
     }
