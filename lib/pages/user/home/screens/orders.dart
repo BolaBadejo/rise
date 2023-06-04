@@ -1028,19 +1028,19 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                           buttonColor: secondaryColor.withOpacity(0.3),
                           textColor: whiteColor,
                           onPressed: () {
-                            if (booking['user']['user_type'] == "Vendor") {
-                              getPickUp(booking['id']);
-                              showLogistics(context, booking);
-                            } else {
-                              payDirect(
-                                  context,
-                                  booking['listing_id'],
-                                  booking['bargained_amount'],
-                                  booking['task_id'],
-                                  booking['id'],
-                                  booking);
-                              // showOffer(context);
-                            }
+                            // if (booking['user']['user_type'] == "Vendor") {
+                            //   getPickUp(booking['id']);
+                            //   showLogistics(context, booking);
+                            // } else {
+                            payDirect(
+                                context,
+                                booking['listing_id'],
+                                booking['bargained_amount'],
+                                booking['task_id'],
+                                booking['id'],
+                                booking);
+                            // showOffer(context);
+                            // }
                           }),
                     ),
                   ],
@@ -1083,7 +1083,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Padding(
@@ -1192,8 +1192,9 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                               return Container(
                                 height: 25.h,
                                 width: 100.w,
-                                margin: EdgeInsets.symmetric(horizontal: 20),
-                                padding: EdgeInsets.symmetric(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 20),
                                 decoration: BoxDecoration(
                                   color: whiteColor,

@@ -1282,15 +1282,15 @@ class _ViewProductDetailScreenState extends State<ViewProductDetailScreen> {
                           onPressed: () async {
                             // print(
                             //     'this is listing id ${widget.dataModel['id']}');
-                            if (widget.userType == "Vendor") {
-                              showLogistics(context);
-                            } else {
-                              payDirect(
-                                context,
-                                widget.dataModel['id'].toString(),
-                                widget.dataModel['minimum_offer'],
-                              );
-                            }
+                            // if (widget.userType == "Vendor") {
+                            //   showLogistics(context);
+                            // } else {
+                            payDirect(
+                              context,
+                              widget.dataModel['id'].toString(),
+                              widget.dataModel['minimum_offer'],
+                            );
+                            // }
                           }),
                     ),
                     const SizedBox(height: 15),

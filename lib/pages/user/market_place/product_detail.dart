@@ -1320,18 +1320,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           buttonColor: blackColor,
                           textColor: whiteColor,
                           onPressed: () {
-                            if (widget.dataModel.user['user_type']! ==
-                                "Vendor") {
-                              showLogistics(context);
-                            } else {
-                              print(
-                                  'this is listing id ${widget.dataModel.id}');
-                              payDirect(
-                                context,
-                                widget.dataModel.id.toString(),
-                                widget.dataModel.minimumOffer!,
-                              );
-                            }
+                            // if (widget.dataModel.user['user_type']! ==
+                            //     "Vendor") {
+                            //   showLogistics(context);
+                            // } else {
+                            //   print(
+                            //       'this is listing id ${widget.dataModel.id}');
+                            payDirect(
+                              context,
+                              widget.dataModel.id.toString(),
+                              widget.dataModel.minimumOffer!,
+                            );
+                            // }
                           }),
                     ),
                     const SizedBox(height: 15),
